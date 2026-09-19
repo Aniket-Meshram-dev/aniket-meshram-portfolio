@@ -1,0 +1,589 @@
+@import "tailwindcss";
+
+/* ── Hide browser scrollbars globally across all engines while keeping scrolling 100% functional ── */
+html,
+body {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Edge, Opera */
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+@layer base {
+  :root {
+    --color-bg: #fff;
+    --color-bg-secondary: #f5f5f7;
+    --color-bg-tertiary: #eeeef2;
+    --color-text: #1a1a2e;
+    --color-text-secondary: #4b5563;
+    --color-text-tertiary: #6b7280;
+    --color-border: #e5e7eb;
+    --color-card: #fff;
+    --color-card-hover: #f9f9fb;
+    --color-navbar: #ffffffd9;
+    --color-primary-glow: #d4547e40;
+    --beams-line-color: #888;
+    --color-primary: #cc3366;
+    --color-primary-light: #d4547e;
+    --color-primary-dark: #a83d62;
+    --color-accent: #0b64f4;
+  }
+
+  .dark {
+    --color-bg: #000;
+    --color-bg-secondary: #080808;
+    --color-bg-tertiary: #0f0f0f;
+    --color-text: #f0f0f0;
+    --color-text-secondary: #a1a1aa;
+    --color-text-tertiary: #71717a;
+    --color-border: #242424;
+    --color-card: #070707;
+    --color-card-hover: #191919;
+    --color-navbar: #0a0a0aeb;
+    --color-primary-glow: #d4547e4d;
+    --beams-line-color: #d4d4d4;
+    --color-primary: #cc3366;
+    --color-primary-light: #d4547e;
+    --color-primary-dark: #a83d62;
+    --color-accent: #3b82f6;
+  }
+}
+
+/* Register Custom Animatable CSS Properties for Smooth Hardware Transitions */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --greeting-glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --skill-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --achievement-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --stat-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --available-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+html {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  letter-spacing: -0.015em;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: clip;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Lenis Smooth Scroll Foundation */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+
+/* Monospace font */
+.font-mono-code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Laser Glow Bar for Active Navigation Pill */
+.nav-laser-beam {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px 1px var(--color-primary), 0 0 20px 2px var(--color-primary-glow);
+}
+
+/* Complete Keyframes Suite from aniketmeshram.me */
+@keyframes rotate-border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@keyframes greeting-glow-rotate {
+  to {
+    --greeting-glow-angle: 360deg;
+  }
+}
+
+@keyframes skill-border-rotate {
+  to {
+    --skill-border-angle: 360deg;
+  }
+}
+
+@keyframes achievement-border-rotate {
+  to {
+    --achievement-border-angle: 360deg;
+  }
+}
+
+@keyframes stat-border-rotate {
+  to {
+    --stat-border-angle: 360deg;
+  }
+}
+
+@keyframes available-gradient-rotate {
+  0% {
+    --available-angle: 0deg;
+  }
+  to {
+    --available-angle: 360deg;
+  }
+}
+
+@keyframes gradient-rotate {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+
+@keyframes timeline-pulse {
+  0%, to {
+    box-shadow: 0 0 8px 3px #e07a9cb3, 0 0 24px 10px #e07a9c66, 0 0 80px 24px #e07a9c33;
+  }
+  50% {
+    box-shadow: 0 0 5px 2px #e07a9c80, 0 0 12px 5px #e07a9c33;
+  }
+}
+
+@keyframes marker-ring-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes lume-pulse {
+  0%, to {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes clock-halo-pulse {
+  0%, to {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float-slow {
+  0%, to {
+    transform: translate(0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 15px) scale(0.95);
+  }
+}
+
+@keyframes float-medium {
+  0%, to {
+    transform: translate(0) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 25px) scale(1.1);
+  }
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(-50%);
+  }
+}
+
+@keyframes marquee-scroll-rtl {
+  0% {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(50%);
+  }
+}
+
+@keyframes cta-aurora-drift {
+  0%, to {
+    transform: translate(0) scale(1);
+  }
+  33% {
+    transform: translate(10%, -5%) scale(1.1);
+  }
+  66% {
+    transform: translate(-5%, 8%) scale(0.95);
+  }
+}
+
+@keyframes cta-aurora-drift-alt {
+  0%, to {
+    transform: translate(0) scale(1);
+  }
+  33% {
+    transform: translate(-8%, 6%) scale(1.05);
+  }
+  66% {
+    transform: translate(6%, -4%) scale(0.9);
+  }
+}
+
+@keyframes cta-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes hero-gradient-shift {
+  0%, to {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+}
+
+@keyframes impact-glow-pulse {
+  0%, to {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes impact-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes impact-orbit-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes cv-bounce {
+  0%, to {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+/* Applied Animation Utility Classes */
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.float-medium {
+  animation: float-medium 4s ease-in-out infinite;
+}
+
+.lume-dot {
+  animation: lume-pulse 4s ease-in-out infinite;
+}
+
+.clock-halo-pulse {
+  animation: clock-halo-pulse 3s ease-in-out infinite;
+}
+
+.marker-ring-pulse {
+  animation: marker-ring-pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.timeline-pulse {
+  animation: timeline-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.hero-marquee-strip {
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.hero-marquee-track {
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
+  display: inline-flex;
+}
+
+.hero-marquee-track-reverse {
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite reverse;
+  display: inline-flex;
+}
+
+.available-border-ring {
+  background: conic-gradient(from var(--available-angle, 0deg), transparent 20%, #10b981 50%, transparent 80%);
+  animation: available-gradient-rotate 4s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1.5px;
+}
+
+.skill-conic-border {
+  background: conic-gradient(from var(--skill-border-angle, 0deg), transparent 25%, var(--skill-color, #cc3366) 55%, transparent 85%);
+  animation: skill-border-rotate 2.8s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1.5px;
+}
+
+.perspective-800 {
+  perspective: 800px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.misc-board-dots {
+  background-color: var(--color-bg-secondary);
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Authentic Top Bar Laser Glow from aniketmeshram.me */
+.nav-glow-beam {
+  background: radial-gradient(50% 100% at 50% 0%, rgb(212, 84, 126) 0%, transparent 100%);
+  box-shadow: 0px 0px 12px 4px rgba(212, 84, 126, 0.3), 0px 0px 28px 8px rgba(212, 84, 126, 0.3);
+  filter: blur(3px);
+}
+
+.nav-glow-core {
+  background: linear-gradient(90deg, transparent 0%, rgb(224, 122, 156) 20%, rgb(212, 84, 126) 50%, rgb(224, 122, 156) 80%, transparent 100%);
+  box-shadow: 0px 0px 6px 1px rgb(212, 84, 126), 0px 0px 16px 2px rgba(212, 84, 126, 0.3);
+}
+
+/* Authentic Experience Scroll-Driven Spine & Pulse Node from aniketmeshram.me */
+.experience-line {
+  background: linear-gradient(to top, rgb(224, 122, 156) 0%, rgb(249, 216, 227) 40%, transparent 95%);
+}
+
+.experience-dot {
+  background-color: rgb(212, 84, 126);
+  box-shadow: 0px 0px 8px 3px rgba(224, 122, 156, 0.7), 0px 0px 24px 10px rgba(224, 122, 156, 0.4), 0px 0px 76px 23px rgba(224, 122, 156, 0.2);
+}
+
+/* Electric Ripple & Shockwave Animations for Traveling Spine Node */
+@keyframes electric-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+  }
+}
+
+.electric-ripple-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.electric-ripple-1 {
+  animation: electric-ripple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.electric-ripple-2 {
+  animation: electric-ripple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite 0.7s;
+}
+
+.electric-ripple-3 {
+  animation: electric-ripple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite 1.4s;
+}
+
+/* Interactive Tech Tag Glass Chips with Dynamic Brand Glow */
+.tech-interactive-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dark .tech-interactive-chip {
+  background: rgba(22, 22, 28, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tech-interactive-chip:hover {
+  background: var(--brand-bg, rgba(255, 255, 255, 0.1)) !important;
+  border-color: var(--brand-border, var(--color-primary)) !important;
+  color: var(--brand-text, #fff) !important;
+  box-shadow: 0 0 16px var(--brand-glow, rgba(212, 84, 126, 0.4)), inset 0 0 8px var(--brand-bg, rgba(255, 255, 255, 0.05));
+  transform: translateY(-2px) scale(1.03);
+}
+
+.tech-interactive-chip:hover .chip-led {
+  box-shadow: 0 0 8px var(--brand-text, #fff), 0 0 16px var(--brand-glow, rgba(212, 84, 126, 0.5));
+  transform: scale(1.25);
+}
+
+/* Authentic COBE Globe Atmospheric Glow matching UI Primary Rose Theme */
+.globe-glow-wrap {
+  position: relative;
+}
+
+.globe-glow-wrap::before {
+  content: "";
+  pointer-events: none;
+  border-radius: 50%;
+  width: 82%;
+  height: 82%;
+  position: absolute;
+  top: 9%;
+  left: 9%;
+  box-shadow: 
+    rgba(212, 84, 126, 0.14) 0px 0px 30px 4px, 
+    rgba(212, 84, 126, 0.06) 0px 0px 80px 12px;
+}
+
+/* ── Project Card Circular Rotating Badge Animation (awrs.me) ── */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/* ── Global Custom Morphing Cursor (Desktop Fine Pointer Only) ── */
+@media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active body,
+  html.custom-cursor-active a,
+  html.custom-cursor-active button,
+  html.custom-cursor-active [role="button"],
+  html.custom-cursor-active .cursor-pointer {
+    cursor: none !important;
+  }
+
+  /* Retain native text cursor on inputs & textareas for best UX */
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea,
+  html.custom-cursor-active select,
+  html.custom-cursor-active [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+/* ── Bento 3D Card Hardware Layering ── */
+.bento-3d-card {
+  perspective: 1000px;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+

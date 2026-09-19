@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="coinnova-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00df8f" />
+      <stop offset="35%" stop-color="#00c9a7" />
+      <stop offset="70%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <filter id="nova-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Container -->
+  <rect width="100" height="100" rx="26" fill="url(#coinnova-grad)" />
+  <rect x="1.5" y="1.5" width="97" height="97" rx="24.5" stroke="rgba(255, 255, 255, 0.22)" stroke-width="1.5" fill="none" />
+
+  <!-- Orbital C Arc with Node -->
+  <path
+    d="M 52 22 A 28 28 0 1 0 78 50"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="6.8"
+    stroke-linecap="round"
+    filter="url(#nova-glow)"
+  />
+  <circle cx="78" cy="50" r="4.8" fill="#ffffff" filter="url(#nova-glow)" />
+
+  <!-- Central Nova 4-Point Star -->
+  <path
+    d="M 50 23 Q 50 43 77 50 Q 50 57 50 77 Q 50 57 23 50 Q 50 43 50 23 Z"
+    fill="#ffffff"
+    filter="url(#nova-glow)"
+  />
+
+  <!-- Core Aperture & Radiant Center Dot -->
+  <circle cx="50" cy="50" r="4.5" fill="#040d1a" />
+  <circle cx="50" cy="50" r="2.2" fill="#00df8f" />
+</svg>
