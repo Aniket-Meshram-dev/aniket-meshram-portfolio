@@ -662,8 +662,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           {/* Recruiter Quick Access: "Download CV / Resume 📄" */}
           <Magnetic strength={0.4} innerParallax>
             <a
-              href="/cv.pdf"
-              download="Aniket_Meshram_Resume.pdf"
+              href="/Aniket_Resume.pdf"
+              download="Aniket_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-full bg-white/[0.05] hover:bg-emerald-500/10 border border-white/15 hover:border-emerald-400/40 text-zinc-200 hover:text-white font-semibold text-xs sm:text-sm tracking-wide backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-[0_0_22px_rgba(16,185,129,0.3)] select-none overflow-hidden"

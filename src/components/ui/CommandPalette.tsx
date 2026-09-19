@@ -112,7 +112,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </svg>
       ),
     },
+    {
+      label: 'Resume (PDF)',
+      href: '/Aniket_Resume.pdf',
+      download: 'Aniket_Resume.pdf',
+      icon: <FileText className="w-4 h-4 text-emerald-400" />,
+    },
   ];
+
+  const isResumeQuery =
+    'resume'.includes(search.toLowerCase().trim()) ||
+    'cv'.includes(search.toLowerCase().trim()) ||
+    search.toLowerCase().includes('res') ||
+    search.toLowerCase().includes('cv');
 
   const filteredProjects = PORTFOLIO_DATA.projects.filter(
     (p) =>
@@ -198,10 +210,40 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 {search.trim() ? (
                   /* Filtered Search Results */
                   <div className="space-y-2">
+                    {/* Direct Quick Match for Resume / CV */}
+                    {isResumeQuery && (
+                      <div className="mb-3">
+                        <p className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider mb-2 px-1">
+                          Direct Document
+                        </p>
+                        <a
+                          href="/Aniket_Resume.pdf"
+                          download="Aniket_Resume.pdf"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={onClose}
+                          className="flex items-center gap-3 p-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all cursor-pointer group"
+                        >
+                          <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-emerald-400/40 p-1 flex items-center justify-center bg-emerald-950/50 text-emerald-400">
+                            <FileText className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-semibold text-white group-hover:text-emerald-300 transition-colors truncate">
+                              Aniket Pravin Meshram — Resume (PDF)
+                            </h4>
+                            <p className="text-xs text-emerald-300/80 truncate">
+                              Download official ATS Resume · Software Engineer · 141 KB
+                            </p>
+                          </div>
+                          <ArrowUpRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+                        </a>
+                      </div>
+                    )}
+
                     <p className="text-[11px] font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider mb-2.5 px-1">
                       Matching Projects ({filteredProjects.length})
                     </p>
-                    {filteredProjects.length === 0 ? (
+                    {filteredProjects.length === 0 && !isResumeQuery ? (
                       <p className="text-sm text-[var(--color-text-tertiary)] py-4 text-center">
                         No projects found matching "{search}"
                       </p>
@@ -278,6 +320,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           <a
                             key={soc.label}
                             href={soc.href}
+                            {...(soc.download ? { download: soc.download } : {})}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="sheet-item flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.04] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all text-sm font-medium"

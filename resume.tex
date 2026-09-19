@@ -1,0 +1,150 @@
+%------------------------------------------------------------------------------
+% ATS-Optimized Resume (100% ATS-Parsable) — Universal pdfLaTeX & XeLaTeX
+% Candidate : Aniket Meshram
+% Order     : Summary -> Skills -> Projects -> Education -> Certifications & Achievements
+% License   : MIT
+%------------------------------------------------------------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{tgtermes} % Times-compatible ATS font for pdfLaTeX (default Overleaf engine)
+\else
+  \usepackage{fontspec}
+  \setmainfont{TeX Gyre Termes} % OpenType Times font for XeLaTeX / LuaLaTeX
+\fi
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref}
+\usepackage[letterpaper, top=0.38in, bottom=0.38in, left=0.52in, right=0.52in]{geometry}
+
+\pagestyle{empty}
+\raggedbottom
+\raggedright
+\setlength{\parindent}{0pt}
+\setlength{\tabcolsep}{0in}
+
+% Clean, prominent section headings with clear visible distance between sections
+\titleformat{\section}{\normalsize\bfseries\scshape}{}{0em}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{0pt}{10pt}{3.5pt}
+
+% Reusable list environments with comfortable line spacing
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.18in, topsep=1.5pt, itemsep=2.0pt, parsep=0pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{3pt}}
+
+% Heading line: Title on left, Date on right (reads left-to-right cleanly for ATS parsers)
+\newcommand{\resumeHeading}[2]{%
+  \noindent\textbf{#1}\hfill\textbf{#2}\par
+}
+% Subheading line: Subtitle on left, Location/Links on right
+\newcommand{\resumeSubHeading}[2]{%
+  \noindent\textit{#1}\hfill\textit{#2}\par
+}
+
+% Clean vertical separator that works in both text & math modes
+\newcommand{\sep}{\hspace{3pt}$|$\hspace{3pt}}
+
+\begin{document}
+\small
+
+%---------------------------------------------------------------------
+% HEADER — Spacious, ATS-safe, clean links with icons
+%---------------------------------------------------------------------
+\begin{center}
+    {\huge \bfseries Aniket Meshram}\par
+    \vspace{2.5pt}
+    {\normalsize Software Engineer \& Full-Stack Developer}\par
+    \vspace{3.5pt}
+    \small
+    \faMapMarkerAlt\hspace{3pt}Amravati, Maharashtra, India \sep
+    \faPhone\hspace{3pt}+91 7028143749 \sep
+    \href{mailto:aniketmeshram445@gmail.com}{\faEnvelope\hspace{3pt}aniketmeshram445@gmail.com}\par
+    \vspace{2.5pt}
+    \href{https://www.linkedin.com/in/aniket-meshram-dev/}{\faLinkedin\hspace{3pt}linkedin.com/in/aniket-meshram-dev} \sep
+    \href{https://github.com/Aniket-Meshram-dev}{\faGithub\hspace{3pt}github.com/Aniket-Meshram-dev}
+\end{center}
+\vspace{2pt}
+
+%---------------------------------------------------------------------
+% 1. PROFESSIONAL SUMMARY
+%---------------------------------------------------------------------
+\section{Professional Summary}
+Software Engineer and Full-Stack Developer with strong foundations in Data Structures, Algorithms, and Java/Spring Boot. Experienced in architecting production web apps and AI platforms using React, Next.js, TypeScript, and Node.js. Demonstrates engineering discipline with 150+ GitHub contributions and an 8.5 CGPA in B.Tech Computer Science and Business Systems.
+
+%---------------------------------------------------------------------
+% 2. TECHNICAL SKILLS
+%---------------------------------------------------------------------
+\section{Technical Skills}
+\textbf{Languages:} Java (OOP, Collections, Multithreading), TypeScript, JavaScript (ES6+), Python, SQL, HTML5, CSS3 \par
+\vspace{2pt}
+\textbf{Frontend:} React 19, Next.js 16, Vite, Tailwind CSS, Redux Toolkit, Zustand, Monaco Editor, React Flow, Chart.js \par
+\vspace{2pt}
+\textbf{Backend \& Cloud:} Node.js, Express, Spring Boot 3, RESTful APIs, WebSockets, PostgreSQL, Neon, Supabase, Docker, Vercel \par
+\vspace{2pt}
+\textbf{Developer Tools \& AI:} Groq LPU (Llama 3.3 70B), Google Gemini, Cloudinary AI, Git, GitHub, Postman, Prisma ORM, Stripe
+
+%---------------------------------------------------------------------
+% 3. FEATURED TECHNICAL PROJECTS
+%---------------------------------------------------------------------
+\section{Featured Technical Projects}
+
+\resumeHeading{NexLearn AI --- Autonomous AI Learning Platform}{2026}
+\resumeSubHeading{Next.js 16, React 19, TypeScript, Prisma, Neon PostgreSQL, Groq LPU, Gemini Flash}{Live Demo \& GitHub}
+\resumeItemListStart
+  \item Built an autonomous course synthesis engine generating multi-module curricula and adaptive quizzes in under 2 seconds using dual-engine LLM cascades (Groq Llama 3.3 70B and Gemini Flash) with Zod runtime validation.
+  \item Integrated in-browser Monaco code sandboxes for live JavaScript and Python execution, dynamic React Flow mindmaps with ELK.js, SuperMemo SM-2 spaced repetition decks, and SHA-256 verifiable QR certificates.
+  \item \textbf{Live Demo}: \href{https://nexlearn-ai-tan.vercel.app/}{\faExternalLinkAlt\hspace{2pt}nexlearn-ai-tan.vercel.app} \sep \textbf{GitHub}: \href{https://github.com/Aniket-Meshram-dev/NexLearn-AI}{\faGithub\hspace{2pt}github.com/Aniket-Meshram-dev/NexLearn-AI}
+\resumeItemListEnd
+\vspace{2pt}
+
+\resumeHeading{CoinNova --- Cryptocurrency Trading Terminal \& AI Behavioral Finance}{2025 -- 2026}
+\resumeSubHeading{React 19, Vite, TypeScript, Tailwind CSS, Zustand, Binance WebSockets, Node.js, Express, PostgreSQL}{Live Demo \& GitHub}
+\resumeItemListStart
+  \item Engineered a full-stack paper-trading terminal with a \$100,000 virtual balance, sub-second Binance WebSocket ticker streams, and an in-memory matching engine supporting Limit, Market, and Stop-Loss orders.
+  \item Built an AI behavioral finance profiler across 6 archetypes (detecting FOMO buying and panic selling), a trade replay simulator, and zero-gas P2P transfers secured by 6-digit PIN vaults.
+  \item \textbf{Live Terminal}: \href{https://coinnova-trading.pages.dev/}{\faExternalLinkAlt\hspace{2pt}coinnova-trading.pages.dev} \sep \textbf{GitHub}: \href{https://github.com/Aniket-Meshram-dev/CoinNova-Trading-Platform}{\faGithub\hspace{2pt}github.com/Aniket-Meshram-dev/CoinNova-Trading-Platform}
+\resumeItemListEnd
+\vspace{2pt}
+
+\resumeHeading{Visionary.ai --- Multi-Model Generative AI \& Career Engineering Suite}{2025}
+\resumeSubHeading{React 19, Vite, Tailwind CSS, Express, Node.js, Supabase PostgreSQL, Groq LPU, Gemini OCR, Stripe}{Live Demo \& GitHub}
+\resumeItemListStart
+  \item Architected real-time Server-Sent Events (SSE) AI article generation with streaming markdown, outline staging, and multi-source content summarizer (YouTube, web URLs, PDFs) into Mermaid.js mindmaps.
+  \item Engineered an ATS resume auditor parsing PDFs via Gemini multimodal OCR with 0--100 rubric scoring, added Cloudinary AI photo inpainting, and integrated multi-currency Stripe and Razorpay payment gateways.
+  \item \textbf{Live App}: \href{https://visionary-nextgen-ai.pages.dev/}{\faExternalLinkAlt\hspace{2pt}visionary-nextgen-ai.pages.dev} \sep \textbf{GitHub}: \href{https://github.com/Aniket-Meshram-dev/Visionary-AI}{\faGithub\hspace{2pt}github.com/Aniket-Meshram-dev/Visionary-AI}
+\resumeItemListEnd
+
+%---------------------------------------------------------------------
+% 4. EDUCATION
+%---------------------------------------------------------------------
+\section{Education}
+
+\resumeHeading{Kolhapur Institute of Technology's College of Engineering (Autonomous)}{2023 -- 2027}
+\resumeSubHeading{Bachelor of Technology in Computer Science and Business Systems, CGPA: 8.5 / 10.0}{Kolhapur, Maharashtra}
+
+\vspace{3pt}
+\resumeHeading{Higher Secondary Certificate (HSC) --- Class XII (Science)}{2022 -- 2023}
+\resumeSubHeading{Maharashtra State Board \sep Score: \textbf{68.17\%}}{Maharashtra, India}
+
+\vspace{3pt}
+\resumeHeading{Secondary School Certificate (SSC) --- Class X}{2019 -- 2020}
+\resumeSubHeading{Maharashtra State Board \sep Score: \textbf{76.00\%}}{Maharashtra, India}
+
+%---------------------------------------------------------------------
+% 5. CERTIFICATIONS AND ACHIEVEMENTS
+%---------------------------------------------------------------------
+\section{Certifications and Achievements}
+\resumeItemListStart
+  \item \textbf{Amazon (Coursera Verified)}: Data Structures and Algorithms (\href{https://coursera.org/verify/IDCYTHLNQSHQ}{IDCYTHLNQSHQ}), Programming with Java (\href{https://coursera.org/verify/V1HZOR69ITZ1}{V1HZOR69ITZ1}), Introduction to Software Development (\href{https://coursera.org/verify/VEWZUQ30XVNG}{VEWZUQ30XVNG}).
+  \item \textbf{Technical Certifications}: Google for Developers AI-ML (\textbf{Grade O - Outstanding}), EduSkills Java Full Stack (\textbf{Grade O - Outstanding}), Palo Alto Networks Cybersecurity (\textbf{Grade B - Good}), Infosys Springboard HTML5 and CSS3.
+  \item \textbf{Open-Source Contributions}: \faGithub\hspace{2pt}Active contributor on GitHub with 150+ contributions in 2026 across 6 public repositories, building and maintaining autonomous AI and full-stack web platforms.
+\resumeItemListEnd
+
+\end{document}

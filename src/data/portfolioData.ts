@@ -85,6 +85,7 @@ export const PORTFOLIO_DATA = {
     education: "B.Tech — Kolhapur Institute of Technology's College of Engineering, Kolhapur (KIT's College of Engineering, Kolhapur)",
     bio: "I'm a Software Engineer & Full-Stack Developer with a passion for building clean, high-performance web applications. I bridge the gap between design and robust engineering, with hands-on experience in full-stack development, modern web technologies, and scalable backend platforms.",
     email: "aniketmeshram445@gmail.com",
+    resume: "/Aniket_Resume.pdf",
     socials: {
       github: "https://github.com/Aniket-Meshram-dev",
       linkedin: "https://www.linkedin.com/in/aniket-meshram-dev/",

@@ -716,10 +716,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
 
                     <Magnetic strength={0.35} innerParallax>
                       <a
-                        href="/cv.pdf"
-                        download
+                        href="/Aniket_Resume.pdf"
+                        download="Aniket_Resume.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="cv-download-btn group/resume relative inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs md:text-sm font-semibold shrink-0 md:mt-4 md:self-start cursor-pointer bg-emerald-950/50 hover:bg-emerald-900/70 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.18)] hover:shadow-[0_0_28px_rgba(16,185,129,0.45)] hover:scale-105 active:scale-95 overflow-hidden select-none"
                         data-cursor="pointer"
+                        title="Download Aniket Resume (PDF)"
                       >
                         <style>{`
                           @keyframes resumeShimmer {

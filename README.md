@@ -108,7 +108,8 @@ A state-of-the-art interactive developer portfolio engineered with **React 19**,
 │   ├── assets/             # Brand logos, icons, visual assets
 │   ├── certificates/       # PDF certificates & previews
 │   ├── projects/           # Project screenshots & previews
-│   ├── cv.pdf              # Downloadable resume
+│   ├── Aniket_Resume.pdf   # Downloadable official resume (PDF)
+│   ├── cv.pdf              # Downloadable resume alias
 │   └── avatar-transparent.png
 ├── src/
 │   ├── components/
