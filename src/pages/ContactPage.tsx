@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { sendContactMessage, isWeb3FormsConfigured } from '@/lib/contact';
 
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -9,6 +10,8 @@ export const ContactPage: React.FC = () => {
   const [topic, setTopic] = useState('Full-time role');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const topics = [
     'Full-time role',
@@ -17,24 +20,40 @@ export const ContactPage: React.FC = () => {
     'Just saying hi',
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
+    if (!name.trim() || !email.trim() || !message.trim()) return;
 
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.6 },
-      colors: ['#d4547e', '#3b82f6', '#10b981'],
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    const result = await sendContactMessage({
+      name,
+      email,
+      topic,
+      message,
     });
 
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setName('');
-      setEmail('');
-      setMessage('');
-    }, 4000);
+    setIsSubmitting(false);
+
+    if (result.success) {
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#d4547e', '#3b82f6', '#10b981'],
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setName('');
+        setEmail('');
+        setMessage('');
+      }, 5000);
+    } else {
+      setErrorMessage(result.message);
+    }
   };
 
   return (
@@ -258,19 +277,63 @@ export const ContactPage: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between pt-2">
+          {/* Error Message Alert */}
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono">
+              ⚠️ {errorMessage}
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
             <button
               type="submit"
-              className="px-8 py-3.5 rounded-full bg-primary text-white font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all cursor-pointer hover:scale-105"
+              disabled={isSubmitting || !name.trim() || !email.trim() || !message.trim()}
+              className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-primary text-white font-semibold text-sm shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all cursor-pointer hover:scale-105 disabled:opacity-50 disabled:pointer-events-none"
             >
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                  </svg>
+                  <span>Sending to Inbox...</span>
+                </>
+              ) : (
+                <span>Send Message ↵</span>
+              )}
             </button>
 
-            {submitted && (
-              <span className="text-sm font-semibold text-emerald-400 animate-pulse">
-                ✓ Message sent successfully!
-              </span>
-            )}
+            <div className="flex items-center gap-3">
+              {submitted && (
+                <span className="text-sm font-semibold text-emerald-400 animate-pulse font-mono">
+                  ✓ Transmitted directly to Aniket!
+                </span>
+              )}
+              {!submitted && (
+                <span className="text-[11px] text-zinc-500 font-mono">
+                  {isWeb3FormsConfigured ? (
+                    <span className="text-emerald-400/80">⚡ Direct Gmail Delivery</span>
+                  ) : (
+                    <span className="text-amber-400/80">ℹ️ Static Mode (Add key in .env for live Gmail delivery)</span>
+                  )}
+                </span>
+              )}
+            </div>
           </div>
         </form>
       </motion.div>

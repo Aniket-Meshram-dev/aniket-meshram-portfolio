@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Magnetic } from '@/components/ui/Magnetic';
 import confetti from 'canvas-confetti';
+import { sendContactMessage, isWeb3FormsConfigured } from '@/lib/contact';
 
 interface ContactSectionProps {
   onNavigate?: (route: string) => void;
@@ -31,6 +32,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   const [message, setMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const btnRef = useRef<HTMLButtonElement>(null);
 
@@ -66,14 +68,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   };
 
   // Handle Mini Message Box Form Submission
-  const handleMessageSubmit = (e: React.FormEvent) => {
+  const handleMessageSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
 
     setIsSubmitting(true);
+    setErrorMessage(null);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    const result = await sendContactMessage({
+      name,
+      email,
+      topic,
+      message,
+    });
+
+    setIsSubmitting(false);
+
+    if (result.success) {
       setIsSuccess(true);
 
       // Full celebratory confetti
@@ -92,7 +103,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
         setMessage('');
         setIsTerminalOpen(false);
       }, 4500);
-    }, 800);
+    } else {
+      setErrorMessage(result.message);
+    }
   };
 
   return (
@@ -216,14 +229,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
               {/* 1. Primary CTA Button with Magnetic Liquid Ripple Aura */}
               <Magnetic strength={0.35} innerParallax>
                 <div className="relative group/btn-wrap">
-                  {/* Concentric Magnetic Sonar Pulse Aura on Hover */}
+                  {/* Concentric Magnetic Subtle Glass Glow Aura on Hover */}
                   <div
                     className={`absolute -inset-2 rounded-full pointer-events-none transition-opacity duration-500 ${
                       isHoveredBtn ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
-                    <div className="absolute inset-0 rounded-full bg-primary/25 animate-ping opacity-35" />
-                    <div className="absolute -inset-1 rounded-full bg-primary/20 blur-md" />
+                    <div className="absolute inset-0 rounded-full bg-white/10 animate-ping opacity-20" />
+                    <div className="absolute -inset-1 rounded-full bg-white/5 blur-md" />
                   </div>
 
                   <button
@@ -234,17 +247,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                     onMouseMove={handleBtnMouseMove}
                     onMouseEnter={() => setIsHoveredBtn(true)}
                     onMouseLeave={() => setIsHoveredBtn(false)}
-                    className="group/btn relative inline-flex items-center gap-3 px-8 py-4 rounded-full border border-[var(--color-border)] bg-[var(--color-card)] overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_60px_-10px] hover:shadow-primary/35 cursor-pointer z-10"
+                    className="group/btn relative inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] overflow-hidden transition-all duration-300 hover:border-white/40 hover:shadow-[0_0_30px_rgba(255,255,255,0.08)] cursor-pointer z-10"
                     data-cursor="pointer"
                   >
-                    {/* Rotating conic border */}
+                    {/* Rotating conic border - clean white glass */}
                     <div
                       className="absolute inset-0 rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500 pointer-events-none"
                       style={
                         {
                           animation: '3.5s linear 0s infinite normal none running rotate-border',
                           background:
-                            'conic-gradient(from var(--border-angle, 0deg), transparent 20%, #d4547e 35%, #e07a9c 50%, #d4547e 65%, transparent 80%)',
+                            'conic-gradient(from var(--border-angle, 0deg), transparent 20%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.2) 65%, transparent 80%)',
                           mask: 'linear-gradient(rgb(255, 255, 255) 0px, rgb(255, 255, 255) 0px) content-box xor, linear-gradient(rgb(255, 255, 255) 0px, rgb(255, 255, 255) 0px)',
                           WebkitMask:
                             'linear-gradient(rgb(255, 255, 255) 0px, rgb(255, 255, 255) 0px) content-box xor, linear-gradient(rgb(255, 255, 255) 0px, rgb(255, 255, 255) 0px)',
@@ -253,12 +266,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                       }
                     />
 
-                    {/* Mouse-Tracking Liquid Magnetic Radial Aura */}
+                    {/* Mouse-Tracking Liquid Magnetic Radial Aura - Clean Glass Silver */}
                     <div
                       className="absolute inset-0 pointer-events-none rounded-full transition-opacity duration-200"
                       style={{
                         opacity: isHoveredBtn ? 1 : 0,
-                        background: `radial-gradient(110px circle at ${ripplePos.x}px ${ripplePos.y}px, rgba(212, 84, 126, 0.45), transparent 75%)`,
+                        background: `radial-gradient(110px circle at ${ripplePos.x}px ${ripplePos.y}px, rgba(255, 255, 255, 0.12), transparent 75%)`,
                       }}
                     />
 
@@ -272,11 +285,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                       }}
                     />
 
-                    <span className="relative z-[1] text-base font-semibold text-[var(--color-text)] transition-colors duration-300 group-hover/btn:text-primary-light">
+                    <span className="relative z-[1] text-base font-semibold text-white transition-colors duration-300">
                       Get in Touch
                     </span>
                     <svg
-                      className="relative z-[1] w-5 h-5 text-[var(--color-text-secondary)] transition-all duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-primary-light rtl:rotate-180 rtl:group-hover/btn:-translate-x-1"
+                      className="relative z-[1] w-5 h-5 text-zinc-300 transition-all duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-white rtl:rotate-180 rtl:group-hover/btn:-translate-x-1"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -299,7 +312,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                 className={`group relative flex items-center gap-2.5 px-6 py-4 rounded-full border transition-all duration-300 cursor-pointer shadow-lg select-none ${
                   copied
                     ? 'border-emerald-500/80 bg-emerald-500/15 text-emerald-300 shadow-[0_0_30px_rgba(16,185,129,0.45)] ring-2 ring-emerald-400/40 scale-105'
-                    : 'border-[var(--color-border)] bg-[var(--color-card)]/80 hover:bg-[var(--color-card)] hover:border-primary/40 text-[var(--color-text)] hover:shadow-primary/20'
+                    : 'border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/30 text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.06)]'
                 }`}
                 title="Click to copy email address"
                 data-cursor="pointer"
@@ -508,10 +521,21 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                           />
                         </div>
 
+                        {/* Error Message Alert if submission failed */}
+                        {errorMessage && (
+                          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono">
+                            ⚠️ {errorMessage}
+                          </div>
+                        )}
+
                         {/* Submit Row */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
                           <span className="text-[11px] text-zinc-500 font-mono">
-                            ⚡ Instant transmission to Aniket's inbox
+                            {isWeb3FormsConfigured ? (
+                              <span className="text-emerald-400/80">⚡ Instant transmission to Aniket's inbox</span>
+                            ) : (
+                              <span className="text-amber-400/80">ℹ️ Inbox ready (add key in .env for live Gmail delivery)</span>
+                            )}
                           </span>
 
                           <div className="flex items-center gap-3">

@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import {
+  fetchWallNotes,
+  createWallNote,
+  subscribeWallNotes,
+  isSupabaseConfigured,
+} from '@/lib/supabase';
 
 interface WallItem {
   id: string;
@@ -13,91 +19,143 @@ interface WallItem {
   color?: string;
 }
 
+const INITIAL_STICKERS: WallItem[] = [
+  {
+    id: 'st-1',
+    type: 'sticker',
+    content: '/misc/aizen.png',
+    x: 80,
+    y: 60,
+    rotation: -6,
+  },
+  {
+    id: 'st-2',
+    type: 'sticker',
+    content: '/misc/maki.png',
+    x: 650,
+    y: 40,
+    rotation: 8,
+  },
+  {
+    id: 'st-3',
+    type: 'sticker',
+    content: '/misc/flutter.png',
+    x: 380,
+    y: 120,
+    rotation: -12,
+  },
+  {
+    id: 'st-4',
+    type: 'sticker',
+    content: '/misc/itachi.png',
+    x: 850,
+    y: 220,
+    rotation: 10,
+  },
+  {
+    id: 'st-5',
+    type: 'sticker',
+    content: '/misc/hutao.png',
+    x: 120,
+    y: 320,
+    rotation: 4,
+  },
+  {
+    id: 'st-6',
+    type: 'sticker',
+    content: '/misc/gwen.png',
+    x: 520,
+    y: 350,
+    rotation: -5,
+  },
+];
+
+const DEFAULT_NOTES: WallItem[] = [
+  {
+    id: 'note-1',
+    type: 'note',
+    content: '痛みを知らぬ者に、本当の平和は分からん',
+    author: 'Pain (Nagato)',
+    x: 200,
+    y: 160,
+    rotation: -2,
+    color: '#d4547e',
+  },
+  {
+    id: 'note-2',
+    type: 'note',
+    content: 'Building remarkable things from Muscat with Flutter & passion 🚀',
+    author: 'Visitor from Dubai',
+    x: 480,
+    y: 200,
+    rotation: 3,
+    color: '#3b82f6',
+  },
+  {
+    id: 'note-3',
+    type: 'note',
+    content: 'س س — Cleanest design system seen all year.',
+    author: 'Anonymous',
+    x: 720,
+    y: 360,
+    rotation: -4,
+    color: '#10b981',
+  },
+];
+
 export const WallPage: React.FC = () => {
   const [items, setItems] = useState<WallItem[]>([
-    {
-      id: 'st-1',
-      type: 'sticker',
-      content: '/misc/aizen.png',
-      x: 80,
-      y: 60,
-      rotation: -6,
-    },
-    {
-      id: 'st-2',
-      type: 'sticker',
-      content: '/misc/maki.png',
-      x: 650,
-      y: 40,
-      rotation: 8,
-    },
-    {
-      id: 'st-3',
-      type: 'sticker',
-      content: '/misc/flutter.png',
-      x: 380,
-      y: 120,
-      rotation: -12,
-    },
-    {
-      id: 'st-4',
-      type: 'sticker',
-      content: '/misc/itachi.png',
-      x: 850,
-      y: 220,
-      rotation: 10,
-    },
-    {
-      id: 'st-5',
-      type: 'sticker',
-      content: '/misc/hutao.png',
-      x: 120,
-      y: 320,
-      rotation: 4,
-    },
-    {
-      id: 'st-6',
-      type: 'sticker',
-      content: '/misc/gwen.png',
-      x: 520,
-      y: 350,
-      rotation: -5,
-    },
-    {
-      id: 'note-1',
-      type: 'note',
-      content: '痛みを知らぬ者に、本当の平和は分からん',
-      author: 'Pain (Nagato)',
-      x: 200,
-      y: 160,
-      rotation: -2,
-      color: '#d4547e',
-    },
-    {
-      id: 'note-2',
-      type: 'note',
-      content: 'Building remarkable things from Muscat with Flutter & passion 🚀',
-      author: 'Visitor from Dubai',
-      x: 480,
-      y: 200,
-      rotation: 3,
-      color: '#3b82f6',
-    },
-    {
-      id: 'note-3',
-      type: 'note',
-      content: 'س س — Cleanest design system seen all year.',
-      author: 'Anonymous',
-      x: 720,
-      y: 360,
-      rotation: -4,
-      color: '#10b981',
-    },
+    ...INITIAL_STICKERS,
+    ...DEFAULT_NOTES,
   ]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [newNote, setNewNote] = useState('');
   const [authorName, setAuthorName] = useState('');
+
+  // Fetch Supabase notes on mount and listen to realtime updates
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchWallNotes().then((remoteNotes) => {
+      if (!isMounted) return;
+      if (remoteNotes && remoteNotes.length > 0) {
+        const mappedNotes: WallItem[] = remoteNotes.map((rn, idx) => ({
+          id: rn.id,
+          type: 'note',
+          content: rn.text,
+          author: rn.author,
+          x: rn.x || 180 + (idx % 3) * 230,
+          y: rn.y || 140 + Math.floor(idx / 3) * 110,
+          rotation: rn.rotation || (Math.random() - 0.5) * 12,
+          color: rn.color || '#d4547e',
+        }));
+        setItems([...INITIAL_STICKERS, ...mappedNotes]);
+      }
+    });
+
+    const unsubscribe = subscribeWallNotes((newRemoteNote) => {
+      setItems((prev) => {
+        if (prev.some((item) => item.id === newRemoteNote.id)) return prev;
+        const newWallItem: WallItem = {
+          id: newRemoteNote.id,
+          type: 'note',
+          content: newRemoteNote.text,
+          author: newRemoteNote.author,
+          x: newRemoteNote.x || Math.random() * 400 + 150,
+          y: newRemoteNote.y || Math.random() * 200 + 120,
+          rotation: newRemoteNote.rotation || (Math.random() - 0.5) * 12,
+          color: newRemoteNote.color,
+        };
+        return [...prev, newWallItem];
+      });
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const handlePin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,10 +182,21 @@ export const WallPage: React.FC = () => {
       color: randomColor,
     };
 
-    setItems([...items, newItem]);
+    setItems((prev) => [...prev, newItem]);
     setNewNote('');
     setAuthorName('');
     setModalOpen(false);
+
+    // Persist to Supabase and cache
+    createWallNote({
+      id: newItem.id,
+      text: newItem.content,
+      author: newItem.author || 'Guest',
+      color: newItem.color || '#d4547e',
+      x: Math.round(newItem.x),
+      y: Math.round(newItem.y),
+      rotation: Math.round(newItem.rotation),
+    });
   };
 
   return (
@@ -158,6 +227,29 @@ export const WallPage: React.FC = () => {
             Ruins
           </span>
         </motion.h1>
+
+        {/* Supabase Realtime Status Pill */}
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-zinc-300 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                  isSupabaseConfigured ? 'bg-emerald-400' : 'bg-primary-light'
+                } opacity-75`}
+              />
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${
+                  isSupabaseConfigured ? 'bg-emerald-500' : 'bg-primary'
+                }`}
+              />
+            </span>
+            <span>
+              {isSupabaseConfigured
+                ? '⚡ Live Supabase Realtime Connected'
+                : '💾 Local Mode (Add Supabase keys in .env for global sync)'}
+            </span>
+          </div>
+        </div>
 
         {/* Pin Something Button with radiant glow */}
         <div className="relative inline-flex items-center justify-center py-2">

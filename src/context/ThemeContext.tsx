@@ -1,51 +1,46 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
-type Theme = 'dark' | 'light' | 'system';
+type Theme = 'dark';
 
 interface ThemeContextType {
-  theme: Theme;
-  effectiveTheme: 'dark' | 'light';
+  theme: 'dark';
+  effectiveTheme: 'dark';
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType>({
+  theme: 'dark',
+  effectiveTheme: 'dark',
+  setTheme: () => {},
+  toggleTheme: () => {},
+});
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const saved = localStorage.getItem('portfolio-theme') as Theme | null;
-    return saved || 'dark';
-  });
-
-  const [effectiveTheme, setEffectiveTheme] = useState<'dark' | 'light'>('dark');
-
   useEffect(() => {
-    localStorage.setItem('portfolio-theme', theme);
+    // Ensure document and body are strictly locked to dark mode
     const root = document.documentElement;
-
-    if (theme === 'system') {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setEffectiveTheme(isDark ? 'dark' : 'light');
-      root.classList.toggle('dark', isDark);
-    } else {
-      setEffectiveTheme(theme);
-      root.classList.toggle('dark', theme === 'dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    root.classList.add('dark');
+    root.classList.remove('light');
+    localStorage.setItem('portfolio-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, effectiveTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme: 'dark',
+        effectiveTheme: 'dark',
+        setTheme: () => {},
+        toggleTheme: () => {},
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
 };
 
 export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme must be used within ThemeProvider');
-  return context;
+  return useContext(ThemeContext);
 };
+

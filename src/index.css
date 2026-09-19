@@ -27,25 +27,7 @@ body {
 }
 
 @layer base {
-  :root {
-    --color-bg: #fff;
-    --color-bg-secondary: #f5f5f7;
-    --color-bg-tertiary: #eeeef2;
-    --color-text: #1a1a2e;
-    --color-text-secondary: #4b5563;
-    --color-text-tertiary: #6b7280;
-    --color-border: #e5e7eb;
-    --color-card: #fff;
-    --color-card-hover: #f9f9fb;
-    --color-navbar: #ffffffd9;
-    --color-primary-glow: #d4547e40;
-    --beams-line-color: #888;
-    --color-primary: #cc3366;
-    --color-primary-light: #d4547e;
-    --color-primary-dark: #a83d62;
-    --color-accent: #0b64f4;
-  }
-
+  :root,
   .dark {
     --color-bg: #000;
     --color-bg-secondary: #080808;

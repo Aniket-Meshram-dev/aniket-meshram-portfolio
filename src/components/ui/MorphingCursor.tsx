@@ -336,16 +336,16 @@ export const MorphingCursor: React.FC = () => {
         ref={ringRef}
         className={`fixed top-0 left-0 pointer-events-none flex items-center justify-center will-change-transform transition-colors duration-200 z-[99999999] ${
           isSnapping
-            ? 'border-2 border-primary/70 bg-primary/[0.08] shadow-[0_0_24px_rgba(212,84,126,0.35)] backdrop-blur-[0.5px]'
+            ? 'border border-white/40 bg-white/[0.06] shadow-[0_0_20px_rgba(255,255,255,0.15)] backdrop-blur-[0.5px]'
             : isArrow
-            ? 'border border-primary/80 bg-primary/[0.16] shadow-[0_0_20px_rgba(212,84,126,0.4)] backdrop-blur-sm'
+            ? 'border border-white/60 bg-white/[0.1] shadow-[0_0_16px_rgba(255,255,255,0.2)] backdrop-blur-sm'
             : isDrag
-            ? 'border-2 border-dashed border-primary/80 bg-black/50 shadow-[0_0_20px_rgba(212,84,126,0.35)] backdrop-blur-sm'
+            ? 'border-2 border-dashed border-white/60 bg-black/50 shadow-[0_0_16px_rgba(255,255,255,0.15)] backdrop-blur-sm'
             : isSticker
             ? 'border border-pink-400/80 bg-pink-500/20 shadow-[0_0_20px_rgba(236,72,153,0.4)] backdrop-blur-sm'
             : isZoom
             ? 'border border-sky-400/80 bg-sky-500/20 shadow-[0_0_20px_rgba(56,189,248,0.4)] backdrop-blur-sm'
-            : 'border-[1.5px] border-primary/50 bg-primary/[0.04] shadow-[0_0_14px_rgba(212,84,126,0.25)]'
+            : 'border-[1.5px] border-white/30 bg-white/[0.03] shadow-[0_0_10px_rgba(255,255,255,0.1)]'
         }`}
         style={{
           width: 36,
@@ -432,7 +432,7 @@ export const MorphingCursor: React.FC = () => {
           width: 5,
           height: 5,
           backgroundColor: '#fff',
-          boxShadow: '0 0 8px 2px #f43f5e, 0 0 14px 4px rgba(244, 63, 94, 0.6)',
+          boxShadow: '0 0 6px 1px rgba(255, 255, 255, 0.85), 0 0 10px 2px rgba(255, 255, 255, 0.35)',
           transform: 'translate3d(-200px, -200px, 0) translate(-50%, -50%)',
         }}
       />

@@ -301,39 +301,64 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           .hero-marquee-strip:hover .hero-marquee-track-reverse {
             animation-play-state: paused !important;
           }
+          .hero-strip-top {
+            transform: rotate(2.5deg);
+          }
+          .hero-strip-bottom {
+            transform: rotate(-2.5deg);
+          }
+          @media (min-width: 640px) {
+            .hero-strip-top {
+              transform: rotate(3.5deg);
+            }
+            .hero-strip-bottom {
+              transform: rotate(-3.5deg);
+            }
+          }
+          @media (max-height: 720px) {
+            .hero-scroll-cue {
+              display: none !important;
+            }
+          }
         `}</style>
 
-        {/* Top Strip: Rose/Crimson Gradient, rotate 3.5deg */}
+        {/* Top Strip: Vivid Crimson-Magenta Gradient matching attached reference */}
         <div
-          className="hero-marquee-strip pointer-events-auto cursor-default absolute left-[-20%] w-[140%] py-4 md:py-5.5 lg:py-6 top-[89%] md:top-[91%] bg-gradient-to-r from-[#9e1c4e] via-[#c42866] to-[#9e1c4e] text-white shadow-2xl z-10 border-y border-pink-400/20 transition-all duration-300 hover:brightness-110"
-          style={{ transform: 'rotate(3.5deg)' }}
+          className="hero-marquee-strip hero-strip-top pointer-events-auto cursor-default absolute left-[-20%] w-[140%] py-2.5 sm:py-3.5 md:py-4.5 lg:py-5 top-[82%] sm:top-[78%] md:top-[77%] lg:top-[78%] text-white shadow-2xl z-10 border-t border-pink-400/30 border-b border-pink-950/40 transition-all duration-300 hover:brightness-110"
+          style={{
+            background: 'linear-gradient(90deg, #990038 0%, #b80045 15%, #c8024e 35%, #e00762 50%, #c8024e 65%, #b80045 85%, #990038 100%)',
+            boxShadow: '0 10px 35px rgba(224, 7, 98, 0.28), 0 2px 10px rgba(0, 0, 0, 0.5)',
+          }}
           title="Hover to pause skills"
         >
           <div className="hero-marquee-track-reverse" style={{ '--marquee-duration': '32s' } as React.CSSProperties}>
             {[...ITEMS_TOP, ...ITEMS_TOP, ...ITEMS_TOP, ...ITEMS_TOP].map((item, idx) => (
               <span key={idx} className="inline-flex items-center shrink-0 hover:scale-105 transition-transform duration-200">
-                <span className="uppercase font-black tracking-wider text-base md:text-lg lg:text-xl px-5 md:px-7 whitespace-nowrap drop-shadow-sm">
+                <span className="uppercase font-black tracking-wider text-xs sm:text-sm md:text-base lg:text-lg px-3.5 sm:px-5 md:px-7 whitespace-nowrap text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
                   {item}
                 </span>
-                <span className="text-base md:text-lg text-pink-200/80 mx-2 md:mx-4 select-none font-bold">●</span>
+                <span className="text-xs sm:text-base text-white/70 mx-1.5 sm:mx-3 md:mx-4 select-none font-bold">●</span>
               </span>
             ))}
           </div>
         </div>
 
-        {/* Bottom Strip: Dark Card/Charcoal, rotate -3.5deg */}
+        {/* Bottom Strip: Sleek Obsidian Charcoal matching attached reference */}
         <div
-          className="hero-marquee-strip pointer-events-auto cursor-default absolute left-[-20%] w-[140%] py-4 md:py-5.5 lg:py-6 top-[92%] md:top-[94%] bg-[#09090b] border-y border-white/10 text-white/90 shadow-2xl z-20 transition-all duration-300 hover:border-white/30 hover:bg-[#121217]"
-          style={{ transform: 'rotate(-3.5deg)' }}
+          className="hero-marquee-strip hero-strip-bottom pointer-events-auto cursor-default absolute left-[-20%] w-[140%] py-2.5 sm:py-3.5 md:py-4.5 lg:py-5 top-[86%] sm:top-[82%] md:top-[81%] lg:top-[82%] text-white/95 shadow-2xl z-20 border-t border-white/[0.12] border-b border-white/[0.06] transition-all duration-300 hover:border-white/30 hover:bg-[#121217]"
+          style={{
+            background: 'linear-gradient(90deg, #08080a 0%, #121217 30%, #17171f 50%, #121217 70%, #08080a 100%)',
+            boxShadow: '0 12px 35px rgba(0, 0, 0, 0.85)',
+          }}
           title="Hover to pause skills"
         >
           <div className="hero-marquee-track" style={{ '--marquee-duration': '38s' } as React.CSSProperties}>
             {[...ITEMS_BOTTOM, ...ITEMS_BOTTOM, ...ITEMS_BOTTOM, ...ITEMS_BOTTOM].map((item, idx) => (
               <span key={idx} className="inline-flex items-center shrink-0 hover:scale-105 transition-transform duration-200">
-                <span className="uppercase font-black tracking-wider text-base md:text-lg lg:text-xl px-5 md:px-7 whitespace-nowrap drop-shadow-sm">
+                <span className="uppercase font-black tracking-wider text-xs sm:text-sm md:text-base lg:text-lg px-3.5 sm:px-5 md:px-7 whitespace-nowrap text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
                   {item}
                 </span>
-                <span className="text-base md:text-lg text-zinc-500 mx-2 md:mx-4 select-none font-bold">●</span>
+                <span className="text-xs sm:text-base text-zinc-500 mx-1.5 sm:mx-3 md:mx-4 select-none font-bold">●</span>
               </span>
             ))}
           </div>
@@ -348,7 +373,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           y: contentY,
           filter: contentFilter,
         }}
-        className="relative z-10 text-center px-6 max-w-4xl translate-y-1 md:translate-y-3 will-change-transform"
+        className="relative z-10 text-center px-4 sm:px-6 max-w-4xl -translate-y-4 sm:-translate-y-6 md:-translate-y-8 will-change-transform"
       >
         {/* Central Ambient Aurora Spotlight (Soft Breathing Glow behind Headline) */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] md:w-[950px] h-[340px] md:h-[480px] pointer-events-none -z-10 select-none">
@@ -400,7 +425,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="hero-greeting uppercase tracking-[0.25em] text-sm md:text-base text-[var(--color-text-secondary)] font-semibold mb-4"
+          className="hero-greeting uppercase tracking-[0.22em] sm:tracking-[0.28em] text-sm sm:text-base md:text-lg lg:text-xl text-[var(--color-text-secondary)] font-bold mb-1.5 sm:mb-2.5 md:mb-3"
         >
           Hi, I'm
         </motion.p>
@@ -409,7 +434,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.15, ease: 'easeInOut' }}
-          className="hero-greeting-line block w-10 h-px mx-auto mb-8 bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent origin-center shadow-[0_0_8px_var(--color-primary)]"
+          className="hero-greeting-line block w-10 sm:w-12 h-px mx-auto mb-2.5 sm:mb-3.5 md:mb-4 bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent origin-center shadow-[0_0_8px_var(--color-primary)]"
         />
 
         <style>{`
@@ -434,7 +459,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
         <h1
           aria-label="Aniket Meshram"
-          className="hero-name relative flex items-center justify-center flex-nowrap whitespace-nowrap text-[clamp(1.75rem,6.8vw,6.5rem)] font-black mb-8 md:mb-10 tracking-tight select-none w-full"
+          className="hero-name relative flex items-center justify-center flex-nowrap whitespace-nowrap text-[clamp(1.75rem,6.8vw,6.5rem)] font-black mb-3.5 md:mb-4.5 tracking-tight select-none w-full"
           style={{ perspective: 600 }}
         >
           {/* Periodic Luxury Metallic Sheen Sweep (Every 5.5s) */}
@@ -511,7 +536,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           initial={{ opacity: 0, y: 15, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
-          className="hero-tagline text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed text-[var(--color-text-secondary)] mb-6 md:mb-8"
+          className="hero-tagline text-sm sm:text-base md:text-xl font-medium max-w-xl mx-auto leading-relaxed text-[var(--color-text-secondary)] mb-3.5 sm:mb-4 md:mb-5 px-2"
         >
           Software Engineer &amp; Full-Stack Developer
         </motion.div>
@@ -561,7 +586,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1, ease: 'easeOut' }}
-          className="flex flex-wrap items-center justify-center gap-3 md:gap-4 relative z-30"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 relative z-30"
         >
           {/* Primary Magnetic Button: "View Projects" with Organic Micro-Glow Pulse */}
           <Magnetic strength={0.4} innerParallax>
@@ -584,13 +609,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
               <button
                 onClick={handleViewProjects}
-                className="relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-pink-600 via-rose-600 to-pink-600 text-white font-semibold text-sm tracking-wide shadow-lg shadow-pink-600/30 hover:shadow-pink-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 overflow-hidden"
+                className="relative inline-flex items-center gap-2 sm:gap-2.5 px-4.5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-pink-600 via-rose-600 to-pink-600 text-white font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-pink-600/30 hover:shadow-pink-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 overflow-hidden"
               >
                 <span className="relative z-10">
                   View Projects
                 </span>
                 <svg
-                  className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                  className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -617,13 +642,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           <Magnetic strength={0.4} innerParallax>
             <button
               onClick={handleScrollToContact}
-              className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-white font-semibold text-sm tracking-wide backdrop-blur-md hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="group relative inline-flex items-center gap-2 sm:gap-2.5 px-4.5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-white font-semibold text-xs sm:text-sm tracking-wide backdrop-blur-md hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               <span className="relative z-10">
                 Get in Touch
               </span>
               <svg
-                className="relative z-10 w-4 h-4 text-zinc-400 group-hover:text-pink-400 transition-colors duration-200"
+                className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-white transition-colors duration-200"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -641,14 +666,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               download="Aniket_Meshram_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/[0.05] hover:bg-emerald-500/10 border border-white/15 hover:border-emerald-400/40 text-zinc-200 hover:text-white font-semibold text-sm tracking-wide backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-[0_0_22px_rgba(16,185,129,0.3)] select-none overflow-hidden"
+              className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-full bg-white/[0.05] hover:bg-emerald-500/10 border border-white/15 hover:border-emerald-400/40 text-zinc-200 hover:text-white font-semibold text-xs sm:text-sm tracking-wide backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-[0_0_22px_rgba(16,185,129,0.3)] select-none overflow-hidden"
               data-cursor="pointer"
               title="Download CV / Resume (PDF)"
             >
               {/* Circular Icon Badge with Download Arrow */}
-              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/20 group-hover:bg-emerald-400/30 text-emerald-400 group-hover:text-emerald-300 transition-colors shrink-0">
+              <div className="flex items-center justify-center w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full bg-emerald-500/20 group-hover:bg-emerald-400/30 text-emerald-400 group-hover:text-emerald-300 transition-colors shrink-0">
                 <svg
-                  className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-y-0.5"
+                  className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform duration-200 group-hover:translate-y-0.5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -666,7 +691,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 Download CV
               </span>
 
-              <span className="text-xs opacity-75 group-hover:opacity-100 transition-opacity" aria-hidden="true">
+              <span className="text-[10px] sm:text-xs opacity-75 group-hover:opacity-100 transition-opacity" aria-hidden="true">
                 📄
               </span>
 
@@ -679,22 +704,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         {/* 6. Floating Scroll Cue (Positioned cleanly below CTAs above the crossing ribbons) */}
         <motion.div
           style={{ opacity: scrollIndicatorOpacity, y: scrollIndicatorY }}
-          className="mt-4 md:mt-5 flex flex-col items-center justify-center select-none"
+          className="hero-scroll-cue mt-2.5 sm:mt-3 md:mt-3.5 flex flex-col items-center justify-center select-none"
         >
           <Magnetic strength={0.3} innerParallax>
             <button
               onClick={handleScrollToAbout}
-              className="group flex flex-col items-center gap-1.5 cursor-pointer focus:outline-none"
+              className="group flex flex-col items-center gap-1 sm:gap-1.5 cursor-pointer focus:outline-none"
               aria-label="Scroll to explore About section"
               title="Scroll to explore"
               data-cursor="pointer"
             >
               {/* Minimalist Glass Mouse Chassis */}
-              <div className="relative w-5 h-8 rounded-full border border-white/20 bg-white/[0.04] backdrop-blur-md flex items-start justify-center p-1 group-hover:border-primary/60 group-hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] transition-all duration-300">
+              <div className="relative w-4 h-6.5 sm:w-5 sm:h-8 rounded-full border border-white/20 bg-white/[0.04] backdrop-blur-md flex items-start justify-center p-0.5 sm:p-1 group-hover:border-primary/60 group-hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] transition-all duration-300">
                 {/* Animated Scroll Wheel Node */}
                 <motion.div
                   animate={{
-                    y: [0, 8, 0],
+                    y: [0, 6, 0],
                     opacity: [1, 0.3, 1],
                   }}
                   transition={{
@@ -702,15 +727,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     repeat: Infinity,
                     ease: 'easeInOut',
                   }}
-                  className="w-1 h-2 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 shadow-[0_0_6px_#f43f5e]"
+                  className="w-0.5 sm:w-1 h-1.5 sm:h-2 rounded-full bg-gradient-to-b from-pink-400 to-rose-500 shadow-[0_0_6px_#f43f5e]"
                 />
               </div>
 
               {/* Micro Caption & Bouncing Chevron */}
-              <div className="flex items-center gap-1 text-[9px] font-mono font-medium tracking-[0.2em] text-zinc-400 group-hover:text-zinc-200 transition-colors uppercase">
+              <div className="flex items-center gap-1 text-[8px] sm:text-[9px] font-mono font-medium tracking-[0.2em] text-zinc-400 group-hover:text-zinc-200 transition-colors uppercase">
                 <span>Scroll</span>
                 <svg
-                  className="w-3 h-3 text-pink-400 animate-bounce"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-pink-400 animate-bounce"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

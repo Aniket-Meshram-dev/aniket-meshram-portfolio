@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import {
+  fetchWallNotes,
+  createWallNote,
+  subscribeWallNotes,
+  isSupabaseConfigured,
+} from '@/lib/supabase';
 
 interface WallSectionProps {
   onNavigate?: (route: string) => void;
@@ -130,6 +136,56 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
     }
   }, [userNotes]);
 
+  // Fetch initial notes from Supabase or cached storage and listen to Realtime updates
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchWallNotes().then((remoteNotes) => {
+      if (!isMounted) return;
+      if (remoteNotes && remoteNotes.length > 0) {
+        const mapped: UserStickyNote[] = remoteNotes.slice(0, 10).map((rn, idx) => ({
+          id: rn.id,
+          text: rn.text,
+          color: rn.color || '#3b82f6',
+          defaultLeft: `${20 + (idx % 3) * 24}%`,
+          defaultTop: `${22 + Math.floor(idx / 3) * 22}%`,
+          defaultRotation: rn.rotation || (idx % 2 === 0 ? 3 : -3),
+          x: rn.x || 0,
+          y: rn.y || 0,
+          rotation: rn.rotation || (idx % 2 === 0 ? 3 : -3),
+          zIndex: 5 + idx,
+          createdAt: rn.created_at ? new Date(rn.created_at).getTime() : Date.now(),
+        }));
+        setUserNotes(mapped);
+      }
+    });
+
+    const unsubscribe = subscribeWallNotes((newRemoteNote) => {
+      setUserNotes((prev) => {
+        if (prev.some((n) => n.id === newRemoteNote.id)) return prev;
+        const newSticky: UserStickyNote = {
+          id: newRemoteNote.id,
+          text: newRemoteNote.text,
+          color: newRemoteNote.color || '#ec4899',
+          defaultLeft: '46%',
+          defaultTop: '36%',
+          defaultRotation: newRemoteNote.rotation || 2,
+          x: 0,
+          y: 0,
+          rotation: newRemoteNote.rotation || 2,
+          zIndex: 20,
+          createdAt: Date.now(),
+        };
+        return [newSticky, ...prev.slice(0, 9)];
+      });
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
+
   // Bring any item to front on grab
   const bringToFront = (id: string) => {
     setMaxZIndex((prev) => {
@@ -241,7 +297,7 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
 
     const newNote: UserStickyNote = {
       id: `user-note-${Date.now()}`,
-      text: trimmed.slice(0, 28),
+      text: trimmed.slice(0, 36),
       color: palette.accent,
       defaultLeft: randomLeft,
       defaultTop: randomTop,
@@ -253,8 +309,19 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
       createdAt: Date.now(),
     };
 
-    setUserNotes((prev) => [newNote, ...prev.slice(0, 7)]);
+    setUserNotes((prev) => [newNote, ...prev.slice(0, 9)]);
     setQuickNoteText('');
+
+    // Persist globally to Supabase and local cache
+    createWallNote({
+      id: newNote.id,
+      text: newNote.text,
+      author: 'Visitor',
+      color: newNote.color,
+      x: 0,
+      y: 0,
+      rotation: newNote.rotation,
+    });
   };
 
   // Delete / unpin sticky note
@@ -299,10 +366,22 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
             {/* Top Board Status Badge */}
             <div className="absolute top-4 left-4 z-40 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-mono pointer-events-none select-none">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                    isSupabaseConfigured ? 'bg-emerald-400' : 'bg-primary-light'
+                  } opacity-75`}
+                />
+                <span
+                  className={`relative inline-flex rounded-full h-2 w-2 ${
+                    isSupabaseConfigured ? 'bg-emerald-500' : 'bg-primary'
+                  }`}
+                />
               </span>
-              <span>Physics Board · Grab &amp; Throw</span>
+              <span>
+                {isSupabaseConfigured
+                  ? '⚡ Live Supabase Sync · Grab & Throw'
+                  : 'Physics Board · Grab & Throw'}
+              </span>
             </div>
 
             {/* Top-Right Board Controls: Shuffle & Reset */}

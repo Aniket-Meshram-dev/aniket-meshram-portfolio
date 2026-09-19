@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
-  Sun,
-  Moon,
   Globe,
   Home,
   FolderKanban,
@@ -14,7 +12,6 @@ import {
   Shield,
   FileText,
 } from 'lucide-react';
-import { useTheme } from '@/context/ThemeContext';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
 
 interface CommandPaletteProps {
@@ -28,7 +25,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
   onNavigate,
 }) => {
-  const { theme, toggleTheme } = useTheme();
   const [search, setSearch] = useState('');
 
   // Handle Cmd+K & Escape keyboard shortcuts
@@ -191,22 +187,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   title="Toggle Language"
                 >
                   <Globe className="w-4 h-4" />
-                </button>
-
-                {/* Theme Toggle button */}
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                  }}
-                  className="shrink-0 w-10 h-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.06] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all cursor-pointer"
-                  aria-label="Theme"
-                  title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-                >
-                  {theme === 'dark' ? (
-                    <Sun className="w-4 h-4" />
-                  ) : (
-                    <Moon className="w-4 h-4" />
-                  )}
                 </button>
               </div>
 
