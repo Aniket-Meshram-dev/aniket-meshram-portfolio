@@ -85,9 +85,6 @@ export const GitHubSection: React.FC = () => {
   const [currentCommitIdx, setCurrentCommitIdx] = useState<number>(0);
   const [isCommitPaused, setIsCommitPaused] = useState<boolean>(false);
 
-  // Wave ignite trigger key (re-triggers wave animation on year switch & in-view)
-  const [waveTriggerKey, setWaveTriggerKey] = useState<number>(0);
-
   // Scroll track progress
   const [scrollProgress, setScrollProgress] = useState<number>(0);
 
@@ -103,7 +100,6 @@ export const GitHubSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const calendarAreaRef = useRef<HTMLDivElement>(null);
   const scrollTrackRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(calendarAreaRef, { once: false, amount: 0.2 });
 
   // Auto-dismiss tooltip if page scrolls
   useEffect(() => {
@@ -130,13 +126,6 @@ export const GitHubSection: React.FC = () => {
     };
   }, []);
 
-  // Re-trigger wave animation when section scrolls into view
-  useEffect(() => {
-    if (isInView) {
-      setWaveTriggerKey((prev) => prev + 1);
-    }
-  }, [isInView]);
-
   // Live Commit Pulse auto-cycle every 4.2 seconds (pausable on hover)
   useEffect(() => {
     if (isCommitPaused || !githubData?.liveCommits?.length) return;
@@ -151,7 +140,6 @@ export const GitHubSection: React.FC = () => {
     if (year === selectedYear) return;
     setSelectedYear(year);
     setHoveredCell(null);
-    setWaveTriggerKey((prev) => prev + 1);
   };
 
   const currentDataset = useMemo(() => {
@@ -259,27 +247,21 @@ export const GitHubSection: React.FC = () => {
       <style>{`
         @keyframes waveIgnite {
           0% {
-            opacity: 0.2;
-            transform: scale(0.65);
-            filter: brightness(0.6);
+            opacity: 0.3;
+            transform: scale(0.75);
           }
-          40% {
+          50% {
             opacity: 1;
-            transform: scale(1.35);
-            filter: brightness(2.5) drop-shadow(0 0 10px rgba(212, 84, 126, 0.95));
-          }
-          70% {
-            transform: scale(1.08);
-            filter: brightness(1.4) drop-shadow(0 0 4px rgba(212, 84, 126, 0.5));
+            transform: scale(1.15);
           }
           100% {
             opacity: 1;
             transform: scale(1);
-            filter: brightness(1) drop-shadow(0 0 0px transparent);
           }
         }
         .heatmap-cell-wave {
-          animation: waveIgnite 750ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+          animation: waveIgnite 450ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+          will-change: transform, opacity;
         }
       `}</style>
 
@@ -497,7 +479,7 @@ export const GitHubSection: React.FC = () => {
                       className="flex-1 overflow-x-auto pb-3 scrollbar-none"
                     >
                       <div
-                        key={`segmented-wave-${selectedYear}-${waveTriggerKey}`}
+                        key={`segmented-wave-${selectedYear}`}
                         className="flex items-start gap-4 md:gap-5 min-w-max"
                       >
                         {segmentedMonths.map((month, monthIdx) => (

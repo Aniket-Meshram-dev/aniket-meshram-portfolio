@@ -170,7 +170,7 @@ const WebDashboardShowcase: React.FC<WebDashboardShowcaseProps> = ({
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="none"
             onLoadedData={() => setIsVideoLoaded(true)}
             className="absolute inset-0 w-full h-full object-cover object-top pointer-events-none z-10"
             style={{
@@ -295,8 +295,20 @@ const FeaturedProjectCard: React.FC<FeaturedProjectCardProps> = ({
     setCardRef(index, el);
   };
 
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+  const isTouchDragging = useRef(false);
+
   useEffect(() => {
+    // On touch devices or when pointer is coarse, bypass RAF 3D card tilt
+    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
+      return;
+    }
+
+    let isRunning = false;
+
     const loop = () => {
+      if (!isRunning) return;
+
       if (isActive && localCardRef.current && mousePosRef.current.isInside) {
         const rect = localCardRef.current.getBoundingClientRect();
         const clientX = mousePosRef.current.x;
@@ -339,22 +351,56 @@ const FeaturedProjectCard: React.FC<FeaturedProjectCardProps> = ({
         dashboardFrameRef.current.style.transform = `translate3d(${currentTilt.current.nx * 14}px, ${currentTilt.current.ny * 10}px, 0)`;
       }
 
-      animFrame.current = requestAnimationFrame(loop);
+      // If active or still settling, continue RAF loop; otherwise stop to save CPU/GPU cycles
+      if (isActive || Math.abs(currentTilt.current.rx) > 0.05 || Math.abs(currentTilt.current.ry) > 0.05) {
+        animFrame.current = requestAnimationFrame(loop);
+      } else {
+        isRunning = false;
+      }
     };
 
-    animFrame.current = requestAnimationFrame(loop);
+    if (isActive || Math.abs(currentTilt.current.rx) > 0.05) {
+      isRunning = true;
+      animFrame.current = requestAnimationFrame(loop);
+    }
+
     return () => {
+      isRunning = false;
       if (animFrame.current) cancelAnimationFrame(animFrame.current);
     };
   }, [isActive, mousePosRef]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStartPos.current = { x: t.clientX, y: t.clientY };
+    isTouchDragging.current = false;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartPos.current) return;
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - touchStartPos.current.x);
+    const dy = Math.abs(t.clientY - touchStartPos.current.y);
+    if (dx > 10 || dy > 10) {
+      isTouchDragging.current = true;
+    }
+  };
+
+  const handleCardClick = () => {
+    if (isTouchDragging.current) {
+      isTouchDragging.current = false;
+      return;
+    }
+    onSelectProject(project);
+    onNavigate(`/projects/${project.slug}`);
+  };
+
   return (
     <div
       ref={assignRef}
-      onClick={() => {
-        onSelectProject(project);
-        onNavigate(`/projects/${project.slug}`);
-      }}
+      onClick={handleCardClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onMouseEnter={(e) => onCardMouseEnter(index, e.clientX, e.clientY)}
       onMouseMove={(e) => onCardMouseMove(index, e.clientX, e.clientY)}
       onMouseLeave={() => onCardMouseLeave(index)}
@@ -461,7 +507,7 @@ const FeaturedProjectCard: React.FC<FeaturedProjectCardProps> = ({
       </div>
 
       {/* Visual Showcase Box: Web Dashboard & Live Teaser */}
-      <div className="project-card-showcase group/showcase mx-3 mb-3 rounded-xl overflow-hidden relative h-[210px] sm:h-[250px] md:h-[300px] lg:h-[320px] md:mx-4 md:mb-3.5">
+      <div className="project-card-showcase group/showcase mx-3 mb-2.5 sm:mb-3 rounded-xl overflow-hidden relative h-[190px] sm:h-[240px] md:h-[310px] lg:h-[340px] md:mx-4 md:mb-3.5">
         <div
           className="h-full flex flex-col relative overflow-hidden p-3 md:p-4"
           style={{ background: project.bgGradient }}
@@ -522,6 +568,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const cardElements = useRef<(HTMLDivElement | null)[]>([]);
 
   const [scrollRange, setScrollRange] = useState(3200);
+  const [containerHeight, setContainerHeight] = useState('3200px');
   const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
 
   const activeCardIndexRef = useRef<number | null>(null);
@@ -664,8 +711,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       if (trackRef.current) {
         const totalW = trackRef.current.scrollWidth;
         const viewW = window.innerWidth;
-        const range = Math.max(1800, totalW - viewW + 160);
+        const viewH = window.innerHeight;
+        const range = Math.max(1600, totalW - viewW + (viewW < 768 ? 60 : 140));
         setScrollRange(range);
+        setContainerHeight(`${range + viewH}px`);
       }
     };
     updateRange();
@@ -680,27 +729,29 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   useEffect(() => {
+    // Only run cursor track RAF loop when fine mouse pointer is inside the section
+    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
+      return;
+    }
+
     const loop = () => {
-      // Check track movement to detect when cards move under stationary mouse
-      if (trackRef.current) {
+      // Check track movement only when stationary mouse pointer is inside to avoid layout thrashing
+      if (mousePos.current.isInside && trackRef.current) {
         const rect = trackRef.current.getBoundingClientRect();
         if (lastTrackLeft.current !== null) {
           const deltaX = rect.left - lastTrackLeft.current;
           if (Math.abs(deltaX) > 0.15) {
-            // Track moving left (deltaX < 0) means advancing forward to next card
-            // Track moving right (deltaX > 0) means going backward to previous card
             const forwardMove = -deltaX;
             const motionKick = Math.sign(forwardMove) * Math.min(Math.abs(forwardMove) * 0.9, 14);
             scrollKick.current += motionKick;
             scrollKick.current = Math.max(-50, Math.min(50, scrollKick.current));
 
-            // Seamlessly transfer active card to the card currently under the mouse
-            if (mousePos.current.isInside) {
-              updateActiveCardFromPoint(mousePos.current.x, mousePos.current.y);
-            }
+            updateActiveCardFromPoint(mousePos.current.x, mousePos.current.y);
           }
         }
         lastTrackLeft.current = rect.left;
+      } else {
+        lastTrackLeft.current = null;
       }
 
       // Smooth decay of scroll kick back to 0
@@ -733,7 +784,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       id="projects"
       ref={containerRef}
       className="relative"
-      style={{ height: '3200px' }}
+      style={{ height: containerHeight }}
     >
       {/* Floating Single Viewport Action Capsule Cursor */}
       <ProjectCursorBadge
@@ -743,16 +794,16 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         activeColor={activeCardIndex !== null ? featuredProjects[activeCardIndex]?.color : undefined}
       />
 
-      <section className="md:sticky md:top-0 md:h-screen overflow-hidden">
-        <div className="md:h-full md:flex md:flex-col md:justify-center pt-24 md:pt-24 pb-8 md:pb-10">
+      <section className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+        <div className="h-full flex flex-col justify-center pt-16 sm:pt-20 md:pt-24 pb-4 md:pb-8">
           {/* Section Heading: aligned within max-w-6xl matching standard page grid */}
-          <div className="w-full max-w-6xl mx-auto px-6 mb-6 md:mb-5 shrink-0">
+          <div className="w-full max-w-6xl mx-auto px-5 sm:px-6 mb-4 sm:mb-5 md:mb-5 shrink-0">
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-text)]"
             >
               Featured Projects
             </motion.h2>
@@ -761,7 +812,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="mt-4 h-1 w-16 rounded-full bg-primary"
+              className="mt-3 sm:mt-4 h-1 w-16 rounded-full bg-primary"
             />
           </div>
 
@@ -770,12 +821,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
             <motion.div
               ref={trackRef}
               style={{ x }}
-              className="w-max flex gap-6 md:gap-7 pb-4 flex-nowrap justify-start px-6 md:ps-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]"
+              className="w-max flex gap-5 sm:gap-6 md:gap-7 pb-2 sm:pb-4 flex-nowrap justify-start px-5 sm:px-6 md:ps-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]"
             >
               {featuredProjects.map((project, idx) => (
                 <div
                   key={project.id}
-                  className="shrink-0 w-[340px] sm:w-[440px] md:w-[560px] lg:w-[600px] flex"
+                  className="shrink-0 w-[86vw] max-w-[360px] sm:max-w-none sm:w-[480px] md:w-[540px] lg:w-[580px] xl:w-[640px] flex"
                 >
                   <FeaturedProjectCard
                     project={project}
@@ -793,7 +844,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               ))}
 
               {/* 6th Card: "View All Projects" CTA Card */}
-              <div className="shrink-0 w-[260px] sm:w-[300px] md:w-[360px] flex">
+              <div className="shrink-0 w-[260px] sm:w-[300px] md:w-[380px] flex">
                 <div
                   onClick={() => {
                     onNavigate('/projects');

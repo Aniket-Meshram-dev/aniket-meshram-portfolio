@@ -109,6 +109,8 @@ export const AppContent: React.FC = () => {
                   setSelectedProject(null);
                   handleNavigate('/projects');
                 }}
+                onSelectProject={handleSelectProject}
+                onNavigate={handleNavigate}
               />
             </motion.div>
           ) : currentRoute === '/' ? (

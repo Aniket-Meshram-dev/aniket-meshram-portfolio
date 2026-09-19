@@ -138,7 +138,20 @@ export const MorphingCursor: React.FC = () => {
         updateVariant('drag');
         return;
       }
-      if (explicit === 'arrow' || explicit === 'pointer') {
+      if (explicit === 'snap' || explicit === 'pointer') {
+        const rect = cursorHolder.getBoundingClientRect();
+        if (rect.width > 0 && rect.width <= 360 && rect.height > 0 && rect.height <= 100) {
+          const computedRadius = parseFloat(window.getComputedStyle(cursorHolder).borderRadius) || 9999;
+          snapTarget.current = {
+            rect,
+            borderRadius: computedRadius,
+            element: cursorHolder,
+          };
+          updateVariant('snap');
+          return;
+        }
+      }
+      if (explicit === 'arrow') {
         snapTarget.current = null;
         updateVariant('arrow');
         return;
@@ -151,10 +164,6 @@ export const MorphingCursor: React.FC = () => {
       if (explicit === 'sticker') {
         snapTarget.current = null;
         updateVariant('sticker');
-        return;
-      }
-      if (explicit === 'snap') {
-        updateVariant('snap');
         return;
       }
     }
@@ -191,29 +200,23 @@ export const MorphingCursor: React.FC = () => {
       return;
     }
 
-    // 6. Magnetic Snap Target for Buttons & Compact Interactive Elements
+    // 6. Magnetic Snap Target for Buttons, Links & Interactive Elements
     const buttonTarget = el.closest('button, a, [role="button"], .cv-download-btn, .nav-item') as HTMLElement | null;
     if (buttonTarget) {
       const rect = buttonTarget.getBoundingClientRect();
-      // Snap only to compact elements (buttons/pills <= 320px width & <= 100px height)
-      if (rect.width > 0 && rect.width <= 320 && rect.height > 0 && rect.height <= 100) {
+      // Snap to compact elements (buttons/pills/links <= 360px width & <= 100px height)
+      if (rect.width > 0 && rect.width <= 360 && rect.height > 0 && rect.height <= 100) {
         const computedRadius = parseFloat(window.getComputedStyle(buttonTarget).borderRadius) || 9999;
         snapTarget.current = {
           rect,
           borderRadius: computedRadius,
           element: buttonTarget,
         };
-
-        // If it's a link or download, show arrow, otherwise snap
-        if (buttonTarget.tagName.toLowerCase() === 'a' && buttonTarget.getAttribute('href') && !buttonTarget.classList.contains('nav-item')) {
-          updateVariant('arrow');
-        } else {
-          updateVariant('snap');
-        }
+        updateVariant('snap');
         return;
       } else {
         snapTarget.current = null;
-        updateVariant('arrow');
+        updateVariant('default');
         return;
       }
     }
@@ -221,8 +224,19 @@ export const MorphingCursor: React.FC = () => {
     // 7. General Clickable Elements
     const isClickable = el.closest('.cursor-pointer, [onclick]');
     if (isClickable) {
+      const rect = (isClickable as HTMLElement).getBoundingClientRect();
+      if (rect.width > 0 && rect.width <= 360 && rect.height > 0 && rect.height <= 100) {
+        const computedRadius = parseFloat(window.getComputedStyle(isClickable).borderRadius) || 9999;
+        snapTarget.current = {
+          rect,
+          borderRadius: computedRadius,
+          element: isClickable as HTMLElement,
+        };
+        updateVariant('snap');
+        return;
+      }
       snapTarget.current = null;
-      updateVariant('arrow');
+      updateVariant('default');
       return;
     }
 
@@ -258,13 +272,13 @@ export const MorphingCursor: React.FC = () => {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        // Elastic magnetic attraction towards button center (65% center, 35% mouse)
-        targetX = centerX + (mouse.current.x - centerX) * 0.32;
-        targetY = centerY + (mouse.current.y - centerY) * 0.32;
-        targetW = rect.width + 10;
-        targetH = rect.height + 10;
-        targetR = Math.min(snapTarget.current.borderRadius + 4, (targetH + 10) / 2);
-        targetScale = mouse.current.isDown ? 0.95 : 1.02;
+        // Subtle elastic attraction towards button center
+        targetX = centerX + (mouse.current.x - centerX) * 0.18;
+        targetY = centerY + (mouse.current.y - centerY) * 0.18;
+        targetW = rect.width + 6;
+        targetH = rect.height + 6;
+        targetR = Math.min(snapTarget.current.borderRadius + 3, (targetH + 6) / 2);
+        targetScale = mouse.current.isDown ? 0.96 : 1;
       } else if (currentVariant.current === 'arrow') {
         targetW = 46;
         targetH = 46;
@@ -284,21 +298,21 @@ export const MorphingCursor: React.FC = () => {
       }
 
       // 3. Smooth LERP integration for outer ring
-      const lerpFactor = currentVariant.current === 'snap' ? 0.24 : 0.18;
+      const lerpFactor = currentVariant.current === 'snap' ? 0.28 : 0.18;
       ring.current.x += (targetX - ring.current.x) * lerpFactor;
       ring.current.y += (targetY - ring.current.y) * lerpFactor;
-      ring.current.w += (targetW - ring.current.w) * 0.22;
-      ring.current.h += (targetH - ring.current.h) * 0.22;
-      ring.current.r += (targetR - ring.current.r) * 0.22;
+      ring.current.w += (targetW - ring.current.w) * 0.25;
+      ring.current.h += (targetH - ring.current.h) * 0.25;
+      ring.current.r += (targetR - ring.current.r) * 0.25;
       ring.current.scale += (targetScale - ring.current.scale) * 0.2;
       ring.current.opacity += (targetOpacity - ring.current.opacity) * 0.25;
 
       // 4. Directly update DOM styles (Zero layout thrashing)
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${dot.current.x}px, ${dot.current.y}px, 0) translate(-50%, -50%) scale(${
-          currentVariant.current === 'hidden' ? 0 : currentVariant.current === 'snap' ? 0.6 : 1
-        })`;
-        dotRef.current.style.opacity = `${ring.current.opacity}`;
+        // Completely hide the dot during snap so button text/icons remain 100% visible
+        const dotScale = currentVariant.current === 'hidden' || currentVariant.current === 'snap' ? 0 : 1;
+        dotRef.current.style.transform = `translate3d(${dot.current.x}px, ${dot.current.y}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+        dotRef.current.style.opacity = currentVariant.current === 'snap' ? '0' : `${ring.current.opacity}`;
       }
 
       if (ringRef.current) {

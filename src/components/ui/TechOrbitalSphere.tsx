@@ -263,10 +263,10 @@ export const TechOrbitalSphere: React.FC = () => {
 
         ctx.save();
 
-        // Outer glow
-        if (item.depth > 0.5 || isHovered) {
+        // Outer glow - only apply expensive shadowBlur on hover to maintain 60 FPS
+        if (isHovered) {
           ctx.shadowColor = tech.color;
-          ctx.shadowBlur = isHovered ? 32 : 14 * item.depth;
+          ctx.shadowBlur = 24;
         }
 
         // Badge bg
@@ -337,7 +337,7 @@ export const TechOrbitalSphere: React.FC = () => {
           cancelAnimationFrame(rafRef.current);
         }
       },
-      { rootMargin: '100px 0px' }
+      { rootMargin: '0px' }
     );
     observer.observe(container);
 
@@ -416,7 +416,7 @@ export const TechOrbitalSphere: React.FC = () => {
     <div
       ref={containerRef}
       className="relative w-full aspect-square max-w-[600px] mx-auto select-none"
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: 'pan-y' }}
     >
       {/* Ambient radial glow behind the sphere */}
       <div

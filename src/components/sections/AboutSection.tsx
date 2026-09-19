@@ -68,6 +68,205 @@ const CinematicCounter: React.FC<CinematicCounterProps> = ({
   );
 };
 
+const SwissClockFace: React.FC = React.memo(() => {
+  const hourHandRef = useRef<SVGGElement>(null);
+  const minuteHandRef = useRef<SVGGElement>(null);
+  const secondHandRef = useRef<SVGGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [dateInfo] = useState(() => {
+    const now = new Date();
+    return {
+      dayDate: now.getDate(),
+      dayName: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][now.getDay()],
+    };
+  });
+
+  useEffect(() => {
+    let animId: number;
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { rootMargin: '0px' }
+    );
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    const tick = () => {
+      if (isVisible) {
+        const now = new Date();
+        const ms = now.getMilliseconds();
+        const s = now.getSeconds() + ms / 1000;
+        const m = now.getMinutes() + s / 60;
+        const h = (now.getHours() % 12) + m / 60;
+
+        const secondDeg = (s / 60) * 360;
+        const minuteDeg = (m / 60) * 360;
+        const hourDeg = (h / 12) * 360;
+
+        if (secondHandRef.current) {
+          secondHandRef.current.setAttribute('transform', `rotate(${secondDeg.toFixed(2)} 180 180)`);
+        }
+        if (minuteHandRef.current) {
+          minuteHandRef.current.setAttribute('transform', `rotate(${minuteDeg.toFixed(2)} 180 180)`);
+        }
+        if (hourHandRef.current) {
+          hourHandRef.current.setAttribute('transform', `rotate(${hourDeg.toFixed(2)} 180 180)`);
+        }
+      }
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(animId);
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="about-row2 orbital-clock-cell relative flex items-center justify-center">
+      <div className="clock-halo" />
+      <div>
+        <svg width="360" height="360" viewBox="0 0 360 360" className="mx-auto clock-face">
+          <defs>
+            <filter id="lumeGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id="handGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <linearGradient id="metalBezel" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#333333" />
+              <stop offset="18%" stopColor="#555555" />
+              <stop offset="38%" stopColor="#888888" />
+              <stop offset="50%" stopColor="#aaaaaa" />
+              <stop offset="62%" stopColor="#888888" />
+              <stop offset="82%" stopColor="#505050" />
+              <stop offset="100%" stopColor="#333333" />
+            </linearGradient>
+            <linearGradient id="innerBezel" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#444444" />
+              <stop offset="50%" stopColor="#262626" />
+              <stop offset="100%" stopColor="#444444" />
+            </linearGradient>
+            <radialGradient id="dialFace" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stopColor="#111111" />
+              <stop offset="75%" stopColor="#0a0a0a" />
+              <stop offset="100%" stopColor="#050505" />
+            </radialGradient>
+            <clipPath id="moonClip">
+              <circle cx="120.24" cy="180" r="27.88" />
+            </clipPath>
+          </defs>
+
+          {/* Bezels */}
+          <circle cx="180" cy="180" r="180" fill="none" stroke="rgba(0,0,0,0.35)" strokeWidth="2" />
+          <circle cx="180" cy="180" r="178" fill="none" stroke="url(#metalBezel)" strokeWidth="5" />
+          <circle cx="180" cy="180" r="175" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" strokeDasharray="137.44 412.33" strokeDashoffset="-27.48" />
+          <circle cx="180" cy="180" r="172" fill="none" stroke="url(#innerBezel)" strokeWidth="3.5" />
+          <circle cx="180" cy="180" r="169" fill="none" stroke="#1a1a1a" strokeWidth="0.8" />
+          <circle cx="180" cy="180" r="168" fill="url(#dialFace)" />
+
+          {/* Concentric rings */}
+          <circle cx="180" cy="180" r="152.72" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
+          <circle cx="180" cy="180" r="129.48" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
+          <circle cx="180" cy="180" r="99.6" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
+          <circle cx="180" cy="180" r="69.72" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
+          <circle cx="180" cy="180" r="150" fill="none" stroke="#2a2a2a" strokeWidth="0.5" opacity="0.5" />
+
+          {/* Hour Indices Lines */}
+          <line x1="180" y1="30" x2="180" y2="15" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="255" y1="50" x2="262.5" y2="37" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="309.9" y1="105" x2="322.8" y2="97.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="330" y1="180" x2="345" y2="180" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="309.9" y1="255" x2="322.8" y2="262.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="255" y1="309.9" x2="262.5" y2="322.8" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="180" y1="330" x2="180" y2="345" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="105" y1="309.9" x2="97.5" y2="322.8" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="50" y1="255" x2="37.1" y2="262.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="30" y1="180" x2="15" y2="180" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="50" y1="105" x2="37.1" y2="97.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+          <line x1="105" y1="50" x2="97.5" y2="37.1" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
+
+          {/* Lume Dots */}
+          <circle cx="180" cy="18" r="3.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="261" cy="39.7" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="320.3" cy="99" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="342" cy="180" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="320.3" cy="261" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="261" cy="320.3" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="180" cy="342" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="99" cy="320.3" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="39.7" cy="261" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="18" cy="180" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="39.7" cy="99" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+          <circle cx="99" cy="39.7" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
+
+          {/* City & Subdials */}
+          <text x="180" y="233" textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="500" fill="rgba(255,255,255,0.4)" letterSpacing="2">
+            AMRAVATI
+          </text>
+
+          {/* Date Window */}
+          <rect x="221.5" y="167.55" width="36.52" height="24.9" rx="3.5" fill="#0c0c0c" stroke="#2a2a2a" strokeWidth="0.7" />
+          <text x="239.76" y="180" textAnchor="middle" dominantBaseline="central" fontSize="13" fontWeight="700" fill="#ffffff" filter="url(#lumeGlow)">
+            {dateInfo.dayDate}
+          </text>
+          <text x="239.76" y="160.08" textAnchor="middle" dominantBaseline="central" fontSize="5.5" fill="rgba(255,255,255,0.35)" letterSpacing="1.2">
+            {dateInfo.dayName}
+          </text>
+
+          {/* Moon Phase Subdial */}
+          <circle cx="120.24" cy="180" r="31.38" fill="none" stroke="#2a2a2a" strokeWidth="0.3" opacity="0.3" />
+          <circle cx="120.24" cy="180" r="29.88" fill="#080808" stroke="#2a2a2a" strokeWidth="0.7" />
+          <text x="120.24" y="145.12" textAnchor="middle" dominantBaseline="central" fontSize="4.5" fill="rgba(255,255,255,0.35)" letterSpacing="1.2">
+            MOON
+          </text>
+          <g clipPath="url(#moonClip)">
+            <circle cx="120.24" cy="180" r="27.88" fill="rgba(255,255,255,0.06)" />
+            <path d="M 120.24 152.12 A 27.88 27.88 0 0 1 120.24 207.88 A 7.1 27.88 0 0 0 120.24 152.12 Z" fill="rgba(255,255,255,0.5)" />
+          </g>
+
+          {/* Hands */}
+          {/* Hour hand */}
+          <g ref={hourHandRef} transform="rotate(0 180 180)">
+            <polygon points="176,195 184,195 183,105 177,105" fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" filter="url(#handGlow)" />
+          </g>
+
+          {/* Minute hand */}
+          <g ref={minuteHandRef} transform="rotate(0 180 180)">
+            <polygon points="177,200 183,200 182,65 178,65" fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" filter="url(#handGlow)" />
+          </g>
+
+          {/* Second hand */}
+          <g ref={secondHandRef} transform="rotate(0 180 180)">
+            <line x1="180" y1="216.5" x2="180" y2="38.9" stroke="#ffffff" strokeWidth="1.1" strokeLinecap="round" />
+            <circle cx="180" cy="216.5" r="3.5" fill="#ffffff" />
+          </g>
+
+          {/* Central Pin */}
+          <circle cx="180" cy="180" r="8.5" fill="#2a2a2a" />
+          <circle cx="180" cy="180" r="6" fill="#ffffff" filter="url(#lumeGlow)" />
+          <circle cx="180" cy="180" r="2.2" fill="#0a0a0a" />
+        </svg>
+      </div>
+    </div>
+  );
+});
+
 export const AboutSection: React.FC<AboutSectionProps> = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isVisibleRef = useRef(false);
@@ -177,56 +376,14 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
       ([entry]) => {
         isVisibleRef.current = entry.isIntersecting;
       },
-      { rootMargin: '150px 0px' }
+      { rootMargin: '0px' }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // Smooth Continuous Sweep Clock (60fps/120fps mechanical gliding motion)
-  const [clockState, setClockState] = useState(() => {
-    const now = new Date();
-    const ms = now.getMilliseconds();
-    const s = now.getSeconds() + ms / 1000;
-    const m = now.getMinutes() + s / 60;
-    const h = (now.getHours() % 12) + m / 60;
-    return {
-      secondDeg: (s / 60) * 360,
-      minuteDeg: (m / 60) * 360,
-      hourDeg: (h / 12) * 360,
-      dayDate: now.getDate(),
-      dayName: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][now.getDay()],
-    };
-  });
-
-  useEffect(() => {
-    let animId: number;
-    const updateClock = () => {
-      if (isVisibleRef.current) {
-        const now = new Date();
-        const ms = now.getMilliseconds();
-        const s = now.getSeconds() + ms / 1000;
-        const m = now.getMinutes() + s / 60;
-        const h = (now.getHours() % 12) + m / 60;
-
-        setClockState({
-          secondDeg: (s / 60) * 360,
-          minuteDeg: (m / 60) * 360,
-          hourDeg: (h / 12) * 360,
-          dayDate: now.getDate(),
-          dayName: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][now.getDay()],
-        });
-      }
-      animId = requestAnimationFrame(updateClock);
-    };
-    animId = requestAnimationFrame(updateClock);
-    return () => cancelAnimationFrame(animId);
-  }, []);
-
-  const { secondDeg, minuteDeg, hourDeg, dayDate, dayName } = clockState;
-
-  // Live IST time string for globe location tag (derived from existing RAF clock — zero extra cost)
+  // Live IST time string for globe location tag (derived from 1s timer — zero extra cost)
   const [istTimeStr, setIstTimeStr] = useState(() => {
     const now = new Date();
     return now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
@@ -500,13 +657,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               <h3 className="text-lg md:text-xl font-bold text-[var(--color-text)] leading-snug">
                 Based in Amravati, <span className="text-[var(--color-text-secondary)]">available globally</span>
               </h3>
-              <div className="flex justify-center mt-3 -mb-72 -mx-6">
+              <div className="flex justify-center mt-3 -mb-72 sm:-mx-6 overflow-hidden sm:overflow-visible">
                 <div className="globe-glow-wrap" style={{ width: 420, height: 420 }}>
                   <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <canvas
                       ref={globeCanvasRef}
                       data-cursor="drag"
-                      style={{ width: 420, height: 420, touchAction: 'none' }}
+                      style={{ width: 420, height: 420, touchAction: 'pan-y' }}
                       onPointerDown={(e) => {
                         isDragging.current = true;
                         pointerStart.current = { x: e.clientX, y: e.clientY };
@@ -772,141 +929,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
               </BentoCard>
 
               {/* Center Orbital Clock Cell */}
-              <div className="about-row2 orbital-clock-cell relative flex items-center justify-center">
-                <div className="clock-halo" />
-                <div>
-                  <svg width="360" height="360" viewBox="0 0 360 360" className="mx-auto clock-face">
-                    <defs>
-                      <filter id="lumeGlow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="2" result="b" />
-                        <feMerge>
-                          <feMergeNode in="b" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                      <filter id="handGlow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="2.5" result="b" />
-                        <feMerge>
-                          <feMergeNode in="b" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                      <linearGradient id="metalBezel" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stopColor="#333333" />
-                        <stop offset="18%" stopColor="#555555" />
-                        <stop offset="38%" stopColor="#888888" />
-                        <stop offset="50%" stopColor="#aaaaaa" />
-                        <stop offset="62%" stopColor="#888888" />
-                        <stop offset="82%" stopColor="#505050" />
-                        <stop offset="100%" stopColor="#333333" />
-                      </linearGradient>
-                      <linearGradient id="innerBezel" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#444444" />
-                        <stop offset="50%" stopColor="#262626" />
-                        <stop offset="100%" stopColor="#444444" />
-                      </linearGradient>
-                      <radialGradient id="dialFace" cx="50%" cy="42%" r="55%">
-                        <stop offset="0%" stopColor="#111111" />
-                        <stop offset="75%" stopColor="#0a0a0a" />
-                        <stop offset="100%" stopColor="#050505" />
-                      </radialGradient>
-                      <clipPath id="moonClip">
-                        <circle cx="120.24" cy="180" r="27.88" />
-                      </clipPath>
-                    </defs>
-
-                    {/* Bezels */}
-                    <circle cx="180" cy="180" r="180" fill="none" stroke="rgba(0,0,0,0.35)" strokeWidth="2" />
-                    <circle cx="180" cy="180" r="178" fill="none" stroke="url(#metalBezel)" strokeWidth="5" />
-                    <circle cx="180" cy="180" r="175" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" strokeDasharray="137.44 412.33" strokeDashoffset="-27.48" />
-                    <circle cx="180" cy="180" r="172" fill="none" stroke="url(#innerBezel)" strokeWidth="3.5" />
-                    <circle cx="180" cy="180" r="169" fill="none" stroke="#1a1a1a" strokeWidth="0.8" />
-                    <circle cx="180" cy="180" r="168" fill="url(#dialFace)" />
-
-                    {/* Concentric rings */}
-                    <circle cx="180" cy="180" r="152.72" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
-                    <circle cx="180" cy="180" r="129.48" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
-                    <circle cx="180" cy="180" r="99.6" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
-                    <circle cx="180" cy="180" r="69.72" fill="none" stroke="#1a1a1a" strokeWidth="0.3" opacity="0.15" />
-                    <circle cx="180" cy="180" r="150" fill="none" stroke="#2a2a2a" strokeWidth="0.5" opacity="0.5" />
-
-                    {/* Hour Indices Lines */}
-                    <line x1="180" y1="30" x2="180" y2="15" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="255" y1="50" x2="262.5" y2="37" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="309.9" y1="105" x2="322.8" y2="97.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="330" y1="180" x2="345" y2="180" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="309.9" y1="255" x2="322.8" y2="262.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="255" y1="309.9" x2="262.5" y2="322.8" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="180" y1="330" x2="180" y2="345" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="105" y1="309.9" x2="97.5" y2="322.8" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="50" y1="255" x2="37.1" y2="262.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="30" y1="180" x2="15" y2="180" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="50" y1="105" x2="37.1" y2="97.5" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-                    <line x1="105" y1="50" x2="97.5" y2="37.1" stroke="rgba(255,255,255,0.55)" strokeWidth="2.2" strokeLinecap="round" />
-
-                    {/* Lume Dots */}
-                    <circle cx="180" cy="18" r="3.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="261" cy="39.7" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="320.3" cy="99" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="342" cy="180" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="320.3" cy="261" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="261" cy="320.3" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="180" cy="342" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="99" cy="320.3" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="39.7" cy="261" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="18" cy="180" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="39.7" cy="99" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-                    <circle cx="99" cy="39.7" r="2.8" fill="#ffffff" filter="url(#lumeGlow)" className="lume-dot" />
-
-                    {/* City & Subdials */}
-                    <text x="180" y="233" textAnchor="middle" dominantBaseline="central" fontSize="7" fontWeight="500" fill="rgba(255,255,255,0.4)" letterSpacing="2">
-                      AMRAVATI
-                    </text>
-
-                    {/* Date Window */}
-                    <rect x="221.5" y="167.55" width="36.52" height="24.9" rx="3.5" fill="#0c0c0c" stroke="#2a2a2a" strokeWidth="0.7" />
-                    <text x="239.76" y="180" textAnchor="middle" dominantBaseline="central" fontSize="13" fontWeight="700" fill="#ffffff" filter="url(#lumeGlow)">
-                      {dayDate}
-                    </text>
-                    <text x="239.76" y="160.08" textAnchor="middle" dominantBaseline="central" fontSize="5.5" fill="rgba(255,255,255,0.35)" letterSpacing="1.2">
-                      {dayName}
-                    </text>
-
-                    {/* Moon Phase Subdial */}
-                    <circle cx="120.24" cy="180" r="31.38" fill="none" stroke="#2a2a2a" strokeWidth="0.3" opacity="0.3" />
-                    <circle cx="120.24" cy="180" r="29.88" fill="#080808" stroke="#2a2a2a" strokeWidth="0.7" />
-                    <text x="120.24" y="145.12" textAnchor="middle" dominantBaseline="central" fontSize="4.5" fill="rgba(255,255,255,0.35)" letterSpacing="1.2">
-                      MOON
-                    </text>
-                    <g clipPath="url(#moonClip)">
-                      <circle cx="120.24" cy="180" r="27.88" fill="rgba(255,255,255,0.06)" />
-                      <path d="M 120.24 152.12 A 27.88 27.88 0 0 1 120.24 207.88 A 7.1 27.88 0 0 0 120.24 152.12 Z" fill="rgba(255,255,255,0.5)" />
-                    </g>
-
-                    {/* Hands */}
-                    {/* Hour hand */}
-                    <g transform={`rotate(${hourDeg} 180 180)`}>
-                      <polygon points="176,195 184,195 183,105 177,105" fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" filter="url(#handGlow)" />
-                    </g>
-
-                    {/* Minute hand */}
-                    <g transform={`rotate(${minuteDeg} 180 180)`}>
-                      <polygon points="177,200 183,200 182,65 178,65" fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" filter="url(#handGlow)" />
-                    </g>
-
-                    {/* Second hand */}
-                    <g transform={`rotate(${secondDeg} 180 180)`}>
-                      <line x1="180" y1="216.5" x2="180" y2="38.9" stroke="#ffffff" strokeWidth="1.1" strokeLinecap="round" />
-                      <circle cx="180" cy="216.5" r="3.5" fill="#ffffff" />
-                    </g>
-
-                    {/* Central Pin */}
-                    <circle cx="180" cy="180" r="8.5" fill="#2a2a2a" />
-                    <circle cx="180" cy="180" r="6" fill="#ffffff" filter="url(#lumeGlow)" />
-                    <circle cx="180" cy="180" r="2.2" fill="#0a0a0a" />
-                  </svg>
-                </div>
-              </div>
+              <SwissClockFace />
 
               {/* Card End: Steve Jobs Quote (Apple TV / Stripe 3D Tilt + Specular Border Glint) */}
               <BentoCard className="about-row2 orbital-card-end" maxTilt={6} depthZ={10}>

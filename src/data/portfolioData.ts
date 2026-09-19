@@ -172,16 +172,16 @@ export const PORTFOLIO_DATA = {
       color: "#059669",
       bgGradient: "linear-gradient(145deg, #065F46, #022C22)",
       logo: "/projects/nexpos/logo.svg",
-      image: "/projects/nexpos/screenshots/08-cashier-terminal.png",
+      image: "/projects/nexpos/screenshots/01-landing-page.png",
       video: "/projects/nexpos/videos/nexpos-walkthrough.mp4",
       screenshots: [
+        "/projects/nexpos/screenshots/01-landing-page.png",
         "/projects/nexpos/screenshots/08-cashier-terminal.png",
         "/projects/nexpos/screenshots/03-super-admin-dashboard.png",
         "/projects/nexpos/screenshots/04-store-admin-dashboard.png",
         "/projects/nexpos/screenshots/06-branch-admin-dashboard.png",
         "/projects/nexpos/screenshots/07-branch-manager-dashboard.png",
         "/projects/nexpos/screenshots/05-store-manager-dashboard.png",
-        "/projects/nexpos/screenshots/01-landing-page.png",
         "/projects/nexpos/screenshots/02-login-page.png",
         "/projects/nexpos/screenshots/09-store-onboarding.png"
       ],
