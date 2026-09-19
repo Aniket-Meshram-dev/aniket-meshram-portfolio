@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Magnetic } from '@/components/ui/Magnetic';
 import { useSmoothScroll } from '@/context/SmoothScrollContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 const ITEMS_TOP = [
   'Full-Stack Developer',
@@ -21,29 +22,13 @@ const ITEMS_BOTTOM = [
   'Software Engineering',
 ];
 
-// Spells "Aniket Meshram" one character at a time with smooth gradient mapping across all characters
-const CHARS = [
-  { char: 'A', pos: '0% 0%' },
-  { char: 'n', pos: '8% 0%' },
-  { char: 'i', pos: '16% 0%' },
-  { char: 'k', pos: '24% 0%' },
-  { char: 'e', pos: '32% 0%' },
-  { char: 't', pos: '40% 0%' },
-  { char: 'M', pos: '52% 0%' },
-  { char: 'e', pos: '60% 0%' },
-  { char: 's', pos: '68% 0%' },
-  { char: 'h', pos: '76% 0%' },
-  { char: 'r', pos: '84% 0%' },
-  { char: 'a', pos: '92% 0%' },
-  { char: 'm', pos: '100% 0%' },
-];
-
 interface HeroSectionProps {
   onNavigate?: (route: string) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
   const { scrollToElement } = useSmoothScroll();
+  const { t, isHindi } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const beamsRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -427,7 +412,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="hero-greeting uppercase tracking-[0.22em] sm:tracking-[0.28em] text-sm sm:text-base md:text-lg lg:text-xl text-[var(--color-text-secondary)] font-bold mb-1.5 sm:mb-2.5 md:mb-3"
         >
-          Hi, I'm
+          {isHindi ? 'नमस्ते, मैं हूँ' : "Hi, I'm"}
         </motion.p>
 
         <motion.span
@@ -458,7 +443,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
         `}</style>
 
         <h1
-          aria-label="Aniket Meshram"
+          aria-label={`${t.hero.title} | ${t.hero.tagline}`}
           className="hero-name relative flex items-center justify-center flex-nowrap whitespace-nowrap text-[clamp(1.75rem,6.8vw,6.5rem)] font-black mb-3.5 md:mb-4.5 tracking-tight select-none w-full"
           style={{ perspective: 600 }}
         >
@@ -480,14 +465,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 animationDelay: '1.2s',
               }}
             >
-              Aniket Meshram
+              {t.hero.title}
             </span>
           </div>
 
           {/* Interactive Staggered Characters with Spring Float & Tilt Wave on Hover */}
-          {CHARS.map((item, index) => (
+          {t.hero.nameChars.map((item, index) => (
             <React.Fragment key={index}>
-              {index === 6 && (
+              {item.char === ' ' && (
                 <span
                   className="inline-block w-[0.25em] md:w-[0.28em] select-none"
                   aria-hidden="true"
@@ -495,39 +480,41 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   &nbsp;
                 </span>
               )}
-              <motion.span
-                initial={{ opacity: 0, y: 30, rotateX: -60, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                whileHover={{
-                  y: -10,
-                  scale: 1.14,
-                  rotate: index % 2 === 0 ? -4 : 4,
-                  filter: 'brightness(1.35) drop-shadow(0 0 14px rgba(244, 63, 94, 0.85))',
-                  transition: { type: 'spring', stiffness: 450, damping: 14 },
-                }}
-                whileTap={{
-                  scale: 0.92,
-                  y: 2,
-                }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.2 + index * 0.04,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="hero-char inline-block bg-clip-text cursor-pointer relative z-10"
-                data-cursor="pointer"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(to right, rgb(168, 61, 98), rgb(212, 84, 126), rgb(224, 122, 156), rgb(245, 184, 204))',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '1300% 100%',
-                  backgroundPosition: item.pos,
-                }}
-              >
-                {item.char}
-              </motion.span>
+              {item.char !== ' ' && (
+                <motion.span
+                  initial={{ opacity: 0, y: 30, rotateX: -60, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                  whileHover={{
+                    y: -10,
+                    scale: 1.14,
+                    rotate: index % 2 === 0 ? -4 : 4,
+                    filter: 'brightness(1.35) drop-shadow(0 0 14px rgba(244, 63, 94, 0.85))',
+                    transition: { type: 'spring', stiffness: 450, damping: 14 },
+                  }}
+                  whileTap={{
+                    scale: 0.92,
+                    y: 2,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay: 0.2 + index * 0.04,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="hero-char inline-block bg-clip-text cursor-pointer relative z-10"
+                  data-cursor="pointer"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(to right, rgb(168, 61, 98), rgb(212, 84, 126), rgb(224, 122, 156), rgb(245, 184, 204))',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundSize: '1300% 100%',
+                    backgroundPosition: item.pos,
+                  }}
+                >
+                  {item.char}
+                </motion.span>
+              )}
             </React.Fragment>
           ))}
         </h1>
@@ -538,7 +525,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
           className="hero-tagline text-sm sm:text-base md:text-xl font-medium max-w-xl mx-auto leading-relaxed text-[var(--color-text-secondary)] mb-3.5 sm:mb-4 md:mb-5 px-2"
         >
-          Software Engineer &amp; Full-Stack Developer
+          {t.hero.tagline}
         </motion.div>
 
         {/* 5. Signature Magnetic Attraction CTA Buttons with Quick Resume & Micro-Glow */}
@@ -612,7 +599,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 className="relative inline-flex items-center gap-2 sm:gap-2.5 px-4.5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-pink-600 via-rose-600 to-pink-600 text-white font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-pink-600/30 hover:shadow-pink-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 overflow-hidden"
               >
                 <span className="relative z-10">
-                  View Projects
+                  {t.hero.viewProjects}
                 </span>
                 <svg
                   className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-1"
@@ -645,7 +632,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               className="group relative inline-flex items-center gap-2 sm:gap-2.5 px-4.5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-white font-semibold text-xs sm:text-sm tracking-wide backdrop-blur-md hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
             >
               <span className="relative z-10">
-                Get in Touch
+                {t.hero.contactMe}
               </span>
               <svg
                 className="relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-white transition-colors duration-200"
@@ -688,7 +675,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               </div>
 
               <span className="relative z-10 font-semibold group-hover:text-emerald-300 transition-colors">
-                Download CV
+                {t.hero.downloadResume}
               </span>
 
               <span className="text-[10px] sm:text-xs opacity-75 group-hover:opacity-100 transition-opacity" aria-hidden="true">

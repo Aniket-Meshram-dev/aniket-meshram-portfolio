@@ -506,6 +506,15 @@ export const PORTFOLIO_DATA = {
       category: "AI & EdTech",
       publishDate: "2026",
       readTime: "9 min read"
+    },
+    {
+      id: "art-4",
+      slug: "multi-modal-generative-ai-workspace",
+      title: "Engineering a Multi-Model AI Hub: SSE Streaming, 4K Diffusion & ATS Resume OCR",
+      excerpt: "Unifying high-velocity Groq LPU text streaming, Cloudinary neural photo inpainting, and multimodal Gemini OCR into a single cohesive full-stack workspace.",
+      category: "Full-Stack AI",
+      publishDate: "2025 – 2026",
+      readTime: "8 min read"
     }
   ] as Article[]
 };

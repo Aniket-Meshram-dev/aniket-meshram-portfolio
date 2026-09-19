@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { SmoothScrollProvider, useSmoothScroll } from '@/context/SmoothScrollContext';
@@ -15,9 +15,17 @@ import { AmbientSpotlight } from '@/components/ui/AmbientSpotlight';
 import { FilmGrain } from '@/components/ui/FilmGrain';
 import { MorphingCursor } from '@/components/ui/MorphingCursor';
 import { PORTFOLIO_DATA, type Project } from '@/data/portfolioData';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { LanguageProvider, useLanguage } from '@/context/LanguageContext';
+import {
+  ROUTE_SEO_MAP,
+  generateBreadcrumbSchema,
+  generateProjectSchema,
+} from '@/utils/seoConfig';
 
 export const AppContent: React.FC = () => {
   const { scrollToTop } = useSmoothScroll();
+  const { language, t } = useLanguage();
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
     if (typeof window !== 'undefined' && window.location.pathname && window.location.pathname !== '') {
       return window.location.pathname;
@@ -67,8 +75,102 @@ export const AppContent: React.FC = () => {
         )
       : null);
 
+  // Compute dynamic SEO metadata for search crawlers & browser title
+  const seoProps = useMemo(() => {
+    if (activeProject) {
+      return {
+        title: language === 'hi'
+          ? `${activeProject.title} — केस स्टडी | अनिकेत मेश्राम`
+          : `${activeProject.title} — Case Study | Aniket Meshram`,
+        description: activeProject.description.slice(0, 155),
+        canonicalPath: `/projects/${activeProject.slug}`,
+        ogImage: activeProject.image,
+        ogType: 'article' as const,
+        keywords: `${activeProject.title}, ${activeProject.tags.join(', ')}, Aniket Meshram Case Study, Full-Stack Architecture`,
+        jsonLd: [
+          generateBreadcrumbSchema([
+            { name: language === 'hi' ? 'मुख्य पृष्ठ' : 'Home', path: '/' },
+            { name: language === 'hi' ? 'परियोजनाएं' : 'Projects', path: '/projects' },
+            { name: activeProject.title, path: `/projects/${activeProject.slug}` },
+          ]),
+          generateProjectSchema(activeProject),
+        ],
+      };
+    }
+
+    if (currentRoute === '/projects') {
+      return {
+        title: t.seo.projectsTitle,
+        description: t.seo.projectsDesc,
+        canonicalPath: '/projects',
+        ogType: 'website' as const,
+        jsonLd: generateBreadcrumbSchema([
+          { name: language === 'hi' ? 'मुख्य पृष्ठ' : 'Home', path: '/' },
+          { name: language === 'hi' ? 'परियोजनाएं' : 'Projects', path: '/projects' },
+        ]),
+      };
+    }
+
+    if (currentRoute === '/blog') {
+      return {
+        title: t.seo.blogTitle,
+        description: t.seo.blogDesc,
+        canonicalPath: '/blog',
+        ogType: 'website' as const,
+        jsonLd: generateBreadcrumbSchema([
+          { name: language === 'hi' ? 'मुख्य पृष्ठ' : 'Home', path: '/' },
+          { name: language === 'hi' ? 'ब्लॉग' : 'Blog', path: '/blog' },
+        ]),
+      };
+    }
+
+    if (currentRoute === '/wall') {
+      return {
+        title: t.seo.wallTitle,
+        description: t.seo.wallDesc,
+        canonicalPath: '/wall',
+        ogType: 'website' as const,
+        jsonLd: generateBreadcrumbSchema([
+          { name: language === 'hi' ? 'मुख्य पृष्ठ' : 'Home', path: '/' },
+          { name: language === 'hi' ? 'दीवार' : 'The Wall', path: '/wall' },
+        ]),
+      };
+    }
+
+    if (currentRoute === '/contact') {
+      return {
+        title: t.seo.contactTitle,
+        description: t.seo.contactDesc,
+        canonicalPath: '/contact',
+        ogType: 'website' as const,
+        jsonLd: generateBreadcrumbSchema([
+          { name: language === 'hi' ? 'मुख्य पृष्ठ' : 'Home', path: '/' },
+          { name: language === 'hi' ? 'संपर्क' : 'Contact', path: '/contact' },
+        ]),
+      };
+    }
+
+    if (currentRoute === '/privacy') {
+      return ROUTE_SEO_MAP['/privacy'];
+    }
+
+    if (currentRoute === '/terms') {
+      return ROUTE_SEO_MAP['/terms'];
+    }
+
+    return {
+      title: t.seo.homeTitle,
+      description: t.seo.homeDesc,
+      canonicalPath: '/',
+      ogType: 'website' as const,
+    };
+  }, [activeProject, currentRoute, language, t]);
+
   return (
     <div className="relative min-h-screen flex flex-col justify-between selection:bg-[#cc3366]/30 selection:text-[#f8e7ed] bg-black text-white">
+      {/* Dynamic SEO Head Management (Title, Meta Description, Canonical, Open Graph, Schema.org) */}
+      <SEOHead {...seoProps} />
+
       {/* Global Morphing Magnetic Cursor (Dual-Ring Laser) */}
       <MorphingCursor />
 
@@ -147,7 +249,7 @@ export const AppContent: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25 }}
             >
-              <BlogPage />
+              <BlogPage onNavigate={handleNavigate} />
             </motion.div>
           ) : currentRoute === '/wall' ? (
             <motion.div
@@ -157,7 +259,7 @@ export const AppContent: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25 }}
             >
-              <WallPage />
+              <WallPage onNavigate={handleNavigate} />
             </motion.div>
           ) : currentRoute === '/contact' ? (
             <motion.div
@@ -167,7 +269,7 @@ export const AppContent: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25 }}
             >
-              <ContactPage />
+              <ContactPage onNavigate={handleNavigate} />
             </motion.div>
           ) : (
             <motion.div
@@ -205,11 +307,13 @@ export const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <SmoothScrollProvider>
-        <MotionConfig reducedMotion="user">
-          <AppContent />
-        </MotionConfig>
-      </SmoothScrollProvider>
+      <LanguageProvider>
+        <SmoothScrollProvider>
+          <MotionConfig reducedMotion="user">
+            <AppContent />
+          </MotionConfig>
+        </SmoothScrollProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 };

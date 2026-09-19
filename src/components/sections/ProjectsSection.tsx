@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { PORTFOLIO_DATA, type Project } from '@/data/portfolioData';
 import { LazyImage } from '@/components/ui/LazyImage';
 import { ProjectCursorBadge } from '@/components/ui/ProjectCursorBadge';
+import { useLanguage } from '@/context/LanguageContext';
 
 /* ───────────────────────────────────────────────────────────────
  *  WebDashboardShowcase
@@ -562,6 +563,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   onSelectProject,
   onNavigate,
 }) => {
+  const { t, isHindi } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const cursorBadgeRef = useRef<HTMLDivElement>(null);
@@ -805,7 +807,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               transition={{ duration: 0.5 }}
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--color-text)]"
             >
-              Featured Projects
+              {t.projects.heading}
             </motion.h2>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -913,10 +915,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
                     <div className="text-center">
                       <h3 className="text-xl md:text-2xl font-extrabold text-[var(--color-text)] mb-2 transition-colors duration-300">
-                        View All Projects
+                        {isHindi ? 'सभी प्रोजेक्ट्स देखें' : 'View All Projects'}
                       </h3>
                       <p className="text-sm text-[var(--color-text-tertiary)] transition-colors duration-300 group-hover/cta:text-[var(--color-text-secondary)]">
-                        See the full collection
+                        {isHindi ? 'पूरा संग्रह एक्सप्लोर करें' : 'See the full collection'}
                       </p>
                     </div>
 

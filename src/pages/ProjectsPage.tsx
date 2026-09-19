@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PORTFOLIO_DATA, type Project } from '@/data/portfolioData';
 import { LazyImage } from '@/components/ui/LazyImage';
 import { ProjectCursorBadge } from '@/components/ui/ProjectCursorBadge';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface GalleryProjectCardProps {
   project: Project;
@@ -31,6 +32,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
   onCardMouseLeave,
   setCardRef,
 }) => {
+  const { isHindi } = useLanguage();
   const localCardRef = useRef<HTMLDivElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
 
@@ -279,7 +281,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
           <div className="relative w-full h-[calc(100%-33px)] overflow-hidden bg-black/90">
             <img
               src={slides[activeSlide]}
-              alt={`${project.title} screenshot ${activeSlide + 1}`}
+              alt={`${project.title} - ${project.category} Interface Preview ${activeSlide + 1}`}
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/frame:scale-[1.02]"
               loading="lazy"
             />
@@ -371,7 +373,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
             onClick={handleCardClick}
             className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white group-hover:text-primary transition-colors cursor-pointer"
           >
-            <span>Explore Case Study</span>
+            <span>{isHindi ? 'केस स्टडी देखें' : 'Explore Case Study'}</span>
             <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -387,7 +389,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
                 className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 text-white transition-all duration-200 flex items-center gap-1.5 shadow-sm active:scale-95"
                 title="Open Live App"
               >
-                <span>Live App</span>
+                <span>{isHindi ? 'लाइव ऐप' : 'Live App'}</span>
                 <svg className="w-3 h-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -438,6 +440,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
   onSelectProject,
   onNavigate,
 }) => {
+  const { t, isHindi } = useLanguage();
   const cursorBadgeRef = useRef<HTMLDivElement>(null);
   const cardElements = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -642,6 +645,19 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
         }}
       />
 
+      {/* ── Breadcrumb Bar ── */}
+      <div className="flex items-center justify-center gap-2 text-xs font-mono text-zinc-500 mb-5">
+        <button
+          type="button"
+          onClick={() => onNavigate?.('/')}
+          className="hover:text-primary transition-colors cursor-pointer"
+        >
+          {t.nav.home}
+        </button>
+        <span>/</span>
+        <span className="text-zinc-300">{t.nav.projects}</span>
+      </div>
+
       {/* ── 1. Hero Header Section ── */}
       <div className="text-center mb-8 sm:mb-10">
         {/* Eyebrow Tag */}
@@ -656,10 +672,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
           <span className="text-[11px] font-mono font-semibold uppercase tracking-[0.2em] text-zinc-300">
-            PORTFOLIO ARCHIVE // 2025 – 2026
+            {t.projects.sectionBadge}
           </span>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">
-            {PORTFOLIO_DATA.projects.length} Platforms
+            {PORTFOLIO_DATA.projects.length} {isHindi ? 'प्लेटफॉर्म्स' : 'Platforms'}
           </span>
         </motion.div>
 
@@ -670,9 +686,9 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
           transition={{ duration: 0.5, delay: 0.08 }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-4"
         >
-          Architected for Scale,{' '}
+          {t.projects.heading}{' '}
           <span className="gradient-text italic font-serif inline-block">
-            Engineered with Precision.
+            {t.projects.headingAccent}
           </span>
         </motion.h1>
 
@@ -683,7 +699,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
           transition={{ duration: 0.4, delay: 0.15 }}
           className="text-sm sm:text-base md:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed"
         >
-          A curated collection of production platforms, autonomous AI cascades, high-throughput POS architectures, and institutional trading ecosystems.
+          {t.projects.subtitle}
         </motion.p>
 
         {/* Minimal Understated Architecture Status */}
@@ -695,15 +711,15 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
         >
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            4 Production Platforms
+            {isHindi ? '4 प्रोडक्शन प्लेटफॉर्म्स' : '4 Production Platforms'}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08]">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            30+ Modern Technologies
+            {isHindi ? '30+ आधुनिक तकनीकें' : '30+ Modern Technologies'}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08]">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            Full-Stack Systems
+            {isHindi ? 'फुल-स्टैक सिस्टम्स' : 'Full-Stack Systems'}
           </span>
         </motion.div>
       </div>
@@ -755,7 +771,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search stack or title (e.g. Next.js, Spring Boot, AI)..."
+              placeholder={isHindi ? 'तकनीक या प्रोजेक्ट खोजें (जैसे Next.js, Spring Boot, AI)...' : 'Search stack or title (e.g. Next.js, Spring Boot, AI)...'}
               className="w-full pl-10 pr-9 py-2 rounded-xl bg-black/40 border border-white/10 text-xs sm:text-sm text-white placeholder:text-zinc-400 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors"
             />
             {searchQuery && (
@@ -835,16 +851,18 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
+          <h3 className="text-xl font-bold text-white mb-2">{isHindi ? 'कोई प्रोजेक्ट नहीं मिला' : 'No projects found'}</h3>
           <p className="text-sm text-zinc-400 max-w-md mx-auto mb-6">
-            No projects matched your current filters or search query. Try clearing filters or searching for another technology.
+            {isHindi
+              ? 'वर्तमान फ़िल्टर या खोज के अनुरूप कोई प्रोजेक्ट नहीं मिला। कृपया फ़िल्टर रीसेट करें।'
+              : 'No projects matched your current filters or search query. Try clearing filters or searching for another technology.'}
           </p>
           <button
             type="button"
             onClick={handleResetFilters}
             className="px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-semibold shadow-lg hover:brightness-110 transition-all cursor-pointer"
           >
-            Clear Filters &amp; View All
+            {isHindi ? 'फ़िल्टर हटाएं व सभी देखें' : 'Clear Filters & View All'}
           </button>
         </div>
       )}
@@ -865,24 +883,39 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
         />
         <div className="relative z-10 max-w-2xl mx-auto">
           <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-primary font-semibold px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 inline-block mb-4">
-            Let's Collaborate
+            {isHindi ? 'सहयोग व चर्चा' : "Let's Collaborate"}
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight">
-            Have an architectural challenge or ambitious idea?
+            {isHindi ? 'कोई तकनीकी चुनौती या बड़ा विचार है?' : 'Have an architectural challenge or ambitious idea?'}
           </h2>
           <p className="text-sm sm:text-base text-zinc-400 mb-8 leading-relaxed">
-            Whether you're building high-throughput cloud backends, AI-powered ecosystems, or real-time web applications, let's connect and engineer something exceptional.
+            {isHindi
+              ? 'चाहे आप उच्च-क्षमता क्लाउड बैकएंड, एआई सिस्टम, या रीयल-टाइम वेब ऐप्स बना रहे हों — आइए मिलकर कुछ उत्कृष्ट बनाते हैं।'
+              : "Whether you're building high-throughput cloud backends, AI-powered ecosystems, or real-time web applications, let's connect and engineer something exceptional."}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="mailto:aniketmeshram445@gmail.com"
-              className="px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm shadow-[0_0_20px_rgba(212,84,126,0.4)] hover:brightness-110 transition-all cursor-pointer flex items-center gap-2 active:scale-95"
-            >
-              <span>Get in Touch</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {onNavigate ? (
+              <button
+                type="button"
+                onClick={() => onNavigate('/contact')}
+                className="px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm shadow-[0_0_20px_rgba(212,84,126,0.4)] hover:brightness-110 transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+              >
+                <span>{t.hero.contactMe}</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+            ) : (
+              <a
+                href="mailto:aniketmeshram445@gmail.com"
+                className="px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm shadow-[0_0_20px_rgba(212,84,126,0.4)] hover:brightness-110 transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+              >
+                <span>{t.hero.contactMe}</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            )}
             <a
               href="/Aniket_Resume.pdf"
               download="Aniket_Resume.pdf"
@@ -891,8 +924,26 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
               <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>Download Resume</span>
+              <span>{t.hero.downloadResume}</span>
             </a>
+            {onNavigate && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/blog')}
+                  className="px-5 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-300 hover:text-white font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <span>{isHindi ? 'आर्किटेक्चर ब्लॉग' : 'Architecture Blog'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('/wall')}
+                  className="px-5 py-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-zinc-300 hover:text-white font-semibold text-sm transition-colors flex items-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <span>{isHindi ? 'द वॉल' : 'The Wall'}</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </motion.div>

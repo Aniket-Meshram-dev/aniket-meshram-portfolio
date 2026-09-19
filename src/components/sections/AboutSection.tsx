@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import createGlobe from 'cobe';
 import { BentoCard } from '@/components/ui/BentoCard';
 import { Magnetic } from '@/components/ui/Magnetic';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface AboutSectionProps {
   onNavigate?: (route: string) => void;
@@ -268,6 +269,7 @@ const SwissClockFace: React.FC = React.memo(() => {
 });
 
 export const AboutSection: React.FC<AboutSectionProps> = () => {
+  const { t, isHindi } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const isVisibleRef = useRef(false);
 
@@ -399,17 +401,21 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
   }, []);
 
   // Interactive 3D Bitmoji Avatar state
-  const [avatarBubbleText, setAvatarBubbleText] = useState("Hi, I'm Aniket! 👋");
+  const [avatarBubbleText, setAvatarBubbleText] = useState(isHindi ? 'नमस्ते, मैं अनिकेत हूँ! 👋' : "Hi, I'm Aniket! 👋");
   const [isAvatarBouncing, setIsAvatarBouncing] = useState(false);
+
+  useEffect(() => {
+    setAvatarBubbleText(isHindi ? 'नमस्ते, मैं अनिकेत हूँ! 👋' : "Hi, I'm Aniket! 👋");
+  }, [isHindi]);
 
   const handleAvatarClick = () => {
     setIsAvatarBouncing(true);
-    setAvatarBubbleText("Let's build together! 🚀");
+    setAvatarBubbleText(isHindi ? 'साथ मिलकर बनाते हैं! 🚀' : "Let's build together! 🚀");
     setTimeout(() => {
       setIsAvatarBouncing(false);
     }, 700);
     setTimeout(() => {
-      setAvatarBubbleText("Hi, I'm Aniket! 👋");
+      setAvatarBubbleText(isHindi ? 'नमस्ते, मैं अनिकेत हूँ! 👋' : "Hi, I'm Aniket! 👋");
     }, 3500);
   };
 
@@ -537,7 +543,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
           transition={{ duration: 0.5 }}
           className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
         >
-          About Me
+          {t.about.heading}
         </motion.h2>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -607,7 +613,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                       >
                         <img
                           src="/avatar-transparent.png"
-                          alt="Aniket Meshram"
+                          alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
                           className="w-[128%] h-[128%] max-w-none object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.85)] group-hover/avatar:scale-112 group-hover/avatar:-translate-y-1.5 transition-transform duration-300 ease-out"
                           loading="eager"
                         />
@@ -636,14 +642,14 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                 </Magnetic>
 
                 <div>
-                  <h3 className="text-xl md:text-2xl font-bold gradient-text">Aniket</h3>
+                  <h3 className="text-xl md:text-2xl font-bold gradient-text">{isHindi ? 'अनिकेत मेश्राम' : 'Aniket Meshram'}</h3>
                   <p className="text-sm text-[var(--color-text-secondary)] mt-1">
-                    Software Engineer &amp; Full-Stack Developer
+                    {t.hero.tagline}
                   </p>
                 </div>
               </div>
               <p className="text-base md:text-lg leading-relaxed text-[var(--color-text-secondary)]">
-                I'm a Software Engineer &amp; Full-Stack Developer with a passion for building clean, high-performance web applications. I bridge the gap between design and robust engineering, with hands-on experience in full-stack development, modern web technologies, and scalable backend platforms.
+                {t.about.bioP1}
               </p>
             </div>
           </BentoCard>
@@ -652,10 +658,18 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
           <BentoCard className="about-row1 md:col-span-3 lg:col-span-4 orbital-card-top" maxTilt={5} depthZ={8}>
             <div className="relative z-10 p-5 md:p-6 flex flex-col h-full">
               <span className="text-[11px] text-[var(--color-text-tertiary)] uppercase tracking-[0.2em] font-medium mb-2">
-                Flexible with Timezones
+                {isHindi ? 'समय क्षेत्र (Timezone) लचीलापन' : 'Flexible with Timezones'}
               </span>
               <h3 className="text-lg md:text-xl font-bold text-[var(--color-text)] leading-snug">
-                Based in Amravati, <span className="text-[var(--color-text-secondary)]">available globally</span>
+                {isHindi ? (
+                  <>
+                    अमरावती में स्थित, <span className="text-[var(--color-text-secondary)]">वैश्विक स्तर पर उपलब्ध</span>
+                  </>
+                ) : (
+                  <>
+                    Based in Amravati, <span className="text-[var(--color-text-secondary)]">available globally</span>
+                  </>
+                )}
               </h3>
               <div className="flex justify-center mt-3 -mb-72 sm:-mx-6 overflow-hidden sm:overflow-visible">
                 <div className="globe-glow-wrap" style={{ width: 420, height: 420 }}>
@@ -758,12 +772,12 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     </svg>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-primary/80 uppercase tracking-widest block">Education</span>
-                    <span className="text-[10px] text-[var(--color-text-tertiary)] font-mono">Academic Qualifications</span>
+                    <span className="text-xs font-semibold text-primary/80 uppercase tracking-widest block">{t.about.tabs.education}</span>
+                    <span className="text-[10px] text-[var(--color-text-tertiary)] font-mono">{isHindi ? 'शैक्षणिक योग्यता' : 'Academic Qualifications'}</span>
                   </div>
                 </div>
                 <span className="text-[10px] font-semibold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 shrink-0">
-                  Academic Record
+                  {isHindi ? 'अकादमिक रिकॉर्ड' : 'Academic Record'}
                 </span>
               </div>
 
@@ -775,13 +789,13 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                        <span className="text-[11px] font-semibold text-primary uppercase tracking-wide">Undergraduate</span>
+                        <span className="text-[11px] font-semibold text-primary uppercase tracking-wide">{isHindi ? 'स्नातक' : 'Undergraduate'}</span>
                       </div>
                       <p className="text-xs md:text-sm font-bold text-[var(--color-text)] leading-tight mt-0.5">
-                        B.Tech in Computer Science &amp; Business Systems
+                        {isHindi ? 'बी.टेक - कंप्यूटर साइंस एंड बिजनेस सिस्टम्स' : 'B.Tech in Computer Science & Business Systems'}
                       </p>
                       <p className="text-[11px] text-[var(--color-text-tertiary)] mt-0.5">
-                        KIT's College of Engineering, Kolhapur
+                        {isHindi ? "के.आई.टी. कॉलेज ऑफ इंजीनियरिंग, कोल्हापुर" : "KIT's College of Engineering, Kolhapur"}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono font-medium text-[var(--color-text-tertiary)] shrink-0 bg-[var(--color-bg)]/80 px-1.5 py-0.5 rounded border border-[var(--color-border)]/50">
@@ -789,7 +803,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     </span>
                   </div>
                   <div className="mt-2 pt-2 border-t border-[var(--color-border)]/40 flex items-center justify-between">
-                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">Cumulative Grade</span>
+                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">{isHindi ? 'संचयी ग्रेड' : 'Cumulative Grade'}</span>
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.12)]">
                       ★ 8.5 CGPA
                     </span>
@@ -801,10 +815,10 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-[var(--color-text)] leading-tight">
-                        Higher Secondary Certificate (HSC)
+                        {isHindi ? 'उच्च माध्यमिक प्रमाणपत्र (HSC)' : 'Higher Secondary Certificate (HSC)'}
                       </p>
                       <p className="text-[11px] text-[var(--color-text-tertiary)] mt-0.5">
-                        Higher Secondary Education • Science
+                        {isHindi ? 'उच्च माध्यमिक शिक्षा • विज्ञान' : 'Higher Secondary Education • Science'}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono font-medium text-[var(--color-text-tertiary)] shrink-0 bg-[var(--color-bg)]/80 px-1.5 py-0.5 rounded border border-[var(--color-border)]/50">
@@ -812,7 +826,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     </span>
                   </div>
                   <div className="mt-2 pt-2 border-t border-[var(--color-border)]/40 flex items-center justify-between">
-                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">Board Score</span>
+                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">{isHindi ? 'बोर्ड स्कोर' : 'Board Score'}</span>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/25">
                       68.17 %
                     </span>
@@ -824,10 +838,10 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-xs font-bold text-[var(--color-text)] leading-tight">
-                        Secondary School Certificate (SSC)
+                        {isHindi ? 'माध्यमिक विद्यालय प्रमाणपत्र (SSC)' : 'Secondary School Certificate (SSC)'}
                       </p>
                       <p className="text-[11px] text-[var(--color-text-tertiary)] mt-0.5">
-                        Secondary High School
+                        {isHindi ? 'माध्यमिक विद्यालय' : 'Secondary High School'}
                       </p>
                     </div>
                     <span className="text-[10px] font-mono font-medium text-[var(--color-text-tertiary)] shrink-0 bg-[var(--color-bg)]/80 px-1.5 py-0.5 rounded border border-[var(--color-border)]/50">
@@ -835,7 +849,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                     </span>
                   </div>
                   <div className="mt-2 pt-2 border-t border-[var(--color-border)]/40 flex items-center justify-between">
-                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">Board Score</span>
+                    <span className="text-[11px] text-[var(--color-text-secondary)] font-medium">{isHindi ? 'बोर्ड स्कोर' : 'Board Score'}</span>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
                       76 %
                     </span>
@@ -860,15 +874,15 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
                     </span>
                     <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-[0.15em]">
-                      Available for Work
+                      {isHindi ? 'कार्य के लिए उपलब्ध' : 'Available for Work'}
                     </span>
                   </div>
 
                   <div className="relative flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-0 md:flex-1 md:justify-center">
                     <p className="cta-heading text-[1.05rem] md:text-[1.6rem] font-extrabold leading-[1.2] tracking-tight flex-1 md:flex-none">
-                      <span className="block text-[var(--color-text-secondary)] cta-line-1">HAVE A VISION?</span>
-                      <span className="block gradient-text cta-line-2">LET'S BUILD IT</span>
-                      <span className="block text-[var(--color-text-tertiary)] font-medium italic cta-line-3">together.</span>
+                      <span className="block text-[var(--color-text-secondary)] cta-line-1">{isHindi ? 'कोई नया विचार है?' : 'HAVE A VISION?'}</span>
+                      <span className="block gradient-text cta-line-2">{isHindi ? 'साथ मिलकर बनाते हैं' : "LET'S BUILD IT"}</span>
+                      <span className="block text-[var(--color-text-tertiary)] font-medium italic cta-line-3">{isHindi ? 'नवाचार के साथ।' : 'together.'}</span>
                     </p>
 
                     <Magnetic strength={0.35} innerParallax>
@@ -921,7 +935,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                           </svg>
                         </div>
 
-                        <span className="font-semibold tracking-wide">Download Resume</span>
+                        <span className="font-semibold tracking-wide">{t.hero.downloadResume}</span>
                       </a>
                     </Magnetic>
                   </div>
@@ -939,11 +953,11 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                   </svg>
                   <div className="relative">
                     <p className="text-lg md:text-xl font-bold leading-snug">
-                      <span className="gradient-text italic">Real artists ship.</span>
+                      <span className="gradient-text italic">{isHindi ? 'सच्चे कलाकार शिप करते हैं।' : 'Real artists ship.'}</span>
                     </p>
                     <div className="mt-4 pt-3 border-t border-primary/15">
                       <span className="text-[11px] font-medium text-[var(--color-text-tertiary)] tracking-widest uppercase">
-                        Steve Jobs
+                        {isHindi ? 'स्टीव जॉब्स' : 'Steve Jobs'}
                       </span>
                     </div>
                   </div>
@@ -1015,7 +1029,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                               <circle cx="20" cy="19" r="2" />
                             </svg>
                           </span>
-                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">Production Projects</p>
+                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">{isHindi ? 'प्रोडक्शन प्रोजेक्ट्स' : 'Production Projects'}</p>
                         </div>
                       </div>
                     </div>
@@ -1071,7 +1085,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                               <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                             </svg>
                           </span>
-                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">Virtual Internships</p>
+                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">{isHindi ? 'वर्चुअल इंटर्नशिप' : 'Virtual Internships'}</p>
                         </div>
                       </div>
                     </div>
@@ -1127,7 +1141,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                               <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
                             </svg>
                           </span>
-                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">Certifications</p>
+                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">{isHindi ? 'प्रमाणपत्र' : 'Certifications'}</p>
                         </div>
                       </div>
                     </div>
@@ -1184,7 +1198,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                               <path d="m14.5 4-5 16" />
                             </svg>
                           </span>
-                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">Core Technologies</p>
+                          <p className="text-xs md:text-sm text-[var(--color-text-secondary)] font-medium">{isHindi ? 'प्रमुख तकनीकें' : 'Core Technologies'}</p>
                         </div>
                       </div>
                     </div>

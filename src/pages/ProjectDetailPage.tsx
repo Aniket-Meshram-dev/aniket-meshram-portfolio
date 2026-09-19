@@ -23,6 +23,7 @@ import {
 import { GithubIcon } from '@/components/ui/Icons';
 import { LazyImage } from '@/components/ui/LazyImage';
 import { PORTFOLIO_DATA, type Project } from '@/data/portfolioData';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ProjectDetailPageProps {
   project: Project;
@@ -190,6 +191,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
   onSelectProject,
   onNavigate,
 }) => {
+  const { t, isHindi } = useLanguage();
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'cinema' | 'strip'>('cinema');
@@ -370,14 +372,28 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
 
       {/* ── 1. Top Navigation Bar ── */}
       <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
-        <button
-          type="button"
-          onClick={onBack}
-          className="group inline-flex items-center gap-2 text-xs sm:text-sm font-mono text-zinc-400 hover:text-white transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1 text-primary" />
-          <span>All Projects</span>
-        </button>
+        <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono text-zinc-400">
+          <button
+            type="button"
+            onClick={onBack}
+            className="group inline-flex items-center gap-2 hover:text-white transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1 text-primary" />
+            <span>{isHindi ? 'सभी प्रोजेक्ट्स' : 'All Projects'}</span>
+          </button>
+          {onNavigate && (
+            <>
+              <span className="text-zinc-700 hidden sm:inline">•</span>
+              <button
+                type="button"
+                onClick={() => onNavigate('/')}
+                className="hidden sm:inline text-xs font-mono text-zinc-500 hover:text-white transition-colors cursor-pointer"
+              >
+                {t.nav.home}
+              </button>
+            </>
+          )}
+        </div>
 
         <div className="flex items-center gap-2.5">
           {/* Quick Resume Link for Recruiters */}
@@ -400,7 +416,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
             title="Copy Project Link"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{copiedLink ? 'Copied' : 'Share'}</span>
+            <span className="hidden sm:inline">{copiedLink ? (isHindi ? 'कॉपी हुआ' : 'Copied') : (isHindi ? 'शेयर' : 'Share')}</span>
           </button>
 
           {/* Live App */}
@@ -411,7 +427,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               rel="noopener noreferrer"
               className="px-3.5 py-1.5 rounded-lg bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95"
             >
-              <span>Live App</span>
+              <span>{isHindi ? 'लाइव ऐप' : 'Live App'}</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
@@ -714,7 +730,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                       ) : (
                         <img
                           src={item.src}
-                          alt={item.title}
+                          alt={`${project.title} - ${item.title}`}
                           className="w-full h-full object-cover object-top"
                           loading="lazy"
                         />
@@ -757,7 +773,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                   ) : (
                     <img
                       src={item.src}
-                      alt={item.title}
+                      alt={`${project.title} - ${item.title}`}
                       className="w-full h-full object-cover object-top"
                       loading="lazy"
                       onClick={() => {
@@ -778,7 +794,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         <div className="flex items-center gap-2 mb-3">
           <Lightbulb className="w-5 h-5 text-amber-400 shrink-0" />
           <h2 className="text-base sm:text-lg font-bold text-white">
-            Why I Built This Project
+            {isHindi ? 'यह प्रोजेक्ट क्यों बनाया गया' : 'Why I Built This Project'}
           </h2>
         </div>
         <p className="text-sm sm:text-base text-zinc-300 leading-relaxed font-normal">
@@ -790,10 +806,10 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
       <div className="mb-14 sm:mb-18">
         <div className="mb-6">
           <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold block mb-1">
-            User Flow
+            {isHindi ? 'यूज़र फ्लो' : 'User Flow'}
           </span>
           <h2 className="text-xl sm:text-2xl font-bold text-white">
-            How It Works in 4 Simple Steps
+            {isHindi ? 'यह 4 सरल चरणों में कैसे काम करता है' : 'How It Works in 4 Simple Steps'}
           </h2>
         </div>
 
@@ -831,10 +847,10 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         <div className="mb-14 sm:mb-18">
           <div className="mb-6">
             <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold block mb-1">
-              Core Capabilities
+              {isHindi ? 'प्रमुख क्षमताएं' : 'Core Capabilities'}
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-white">
-              Key Features &amp; Highlights
+              {isHindi ? 'मुख्य विशेषताएं व खूबियां' : 'Key Features & Highlights'}
             </h2>
           </div>
 
@@ -907,10 +923,10 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
       <div className="mb-14 sm:mb-18 pb-8 border-b border-white/10">
         <div className="mb-4">
           <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold block mb-1">
-            Tech Stack
+            {isHindi ? 'तकनीकी स्टैक' : 'Tech Stack'}
           </span>
           <h2 className="text-lg sm:text-xl font-bold text-white">
-            Technologies &amp; Libraries Used
+            {isHindi ? 'प्रयुक्त तकनीकें एवं लाइब्रेरीज' : 'Technologies & Libraries Used'}
           </h2>
         </div>
 
@@ -952,7 +968,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         >
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold block mb-1">
-              Up Next Project
+              {isHindi ? 'अगला प्रोजेक्ट' : 'Up Next Project'}
             </span>
             <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-primary transition-colors tracking-tight">
               {nextProject.title}
@@ -971,18 +987,30 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
       {/* ── 10. Simple Recruiter Contact CTA ── */}
       <div className="text-center py-6">
         <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-          Interested in working together?
+          {isHindi ? 'साथ काम करने में रुचि रखते हैं?' : 'Interested in working together?'}
         </h3>
         <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto mb-6">
-          I'm open to software engineering roles and full-stack development opportunities. Let's connect!
+          {isHindi
+            ? 'मैं सॉफ्टवेयर इंजीनियरिंग रोल्स एवं फुल-स्टैक डेवलपमेंट के अवसरों के लिए उपलब्ध हूँ। आइए चर्चा करते हैं!'
+            : "I'm open to software engineering roles and full-stack development opportunities. Let's connect!"}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={`mailto:${PORTFOLIO_DATA.personal.email}?subject=Regarding your project: ${project.title}`}
-            className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 cursor-pointer"
-          >
-            Get in Touch
-          </a>
+          {onNavigate ? (
+            <button
+              type="button"
+              onClick={() => onNavigate('/contact')}
+              className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              {t.hero.contactMe}
+            </button>
+          ) : (
+            <a
+              href={`mailto:${PORTFOLIO_DATA.personal.email}?subject=Regarding your project: ${project.title}`}
+              className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-white text-xs sm:text-sm font-semibold shadow-md transition-all active:scale-95 cursor-pointer"
+            >
+              {t.hero.contactMe}
+            </a>
+          )}
           <a
             href={PORTFOLIO_DATA.personal.resume}
             target="_blank"
@@ -990,14 +1018,14 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
             className="px-5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10 text-xs sm:text-sm font-medium transition-all active:scale-95 flex items-center gap-1.5"
           >
             <FileText className="w-4 h-4 text-primary" />
-            <span>View Resume</span>
+            <span>{t.hero.downloadResume}</span>
           </a>
           <button
             type="button"
             onClick={onBack}
             className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 text-xs sm:text-sm font-medium transition-colors cursor-pointer"
           >
-            All Projects
+            {isHindi ? 'सभी प्रोजेक्ट्स' : 'All Projects'}
           </button>
         </div>
       </div>

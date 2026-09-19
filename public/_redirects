@@ -1,0 +1,3 @@
+# Cloudflare Pages Single Page Application (SPA) 200 Rewrite
+# Direct deep links, crawler visits, and refreshes fallback cleanly to index.html
+/*    /index.html   200

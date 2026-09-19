@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Magnetic } from '@/components/ui/Magnetic';
 import { useSmoothScroll } from '@/context/SmoothScrollContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 
 interface NavbarProps {
   currentRoute: string;
@@ -34,6 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenCommandPalette,
 }) => {
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [glowCenter, setGlowCenter] = useState<number>(45);
@@ -44,11 +47,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   // Time-based greeting matching aniketmeshram.me
   const greeting = React.useMemo(() => {
     const hour = new Date().getHours();
-    if (hour < 12) return { text: 'Good Morning', emoji: '☀️' };
-    if (hour < 17) return { text: 'Good Afternoon', emoji: '☀️' };
-    if (hour < 21) return { text: 'Good Evening', emoji: '🌆' };
-    return { text: 'Good Night', emoji: '🌙' };
-  }, []);
+    if (hour < 12) return { text: t.nav.greetings.morning, emoji: '☀️' };
+    if (hour < 17) return { text: t.nav.greetings.afternoon, emoji: '☀️' };
+    if (hour < 21) return { text: t.nav.greetings.evening, emoji: '🌆' };
+    return { text: t.nav.greetings.night, emoji: '🌙' };
+  }, [t]);
 
   // Collapse greeting pill into navigation bar after 2.2 seconds (or immediately on click)
   useEffect(() => {
@@ -59,83 +62,46 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const navItems = [
-    { label: 'Home', path: '/', sectionId: 'hero' },
-    { label: 'Projects', path: '/projects', sectionId: 'projects' },
-    { label: 'Blog', path: '/blog', sectionId: 'blog' },
-    { label: 'The Wall', path: '/wall', sectionId: 'wall' },
-    { label: 'Contact', path: '/contact', sectionId: 'contact' },
+    { label: t.nav.home, path: '/' },
+    { label: t.nav.projects, path: '/projects' },
+    { label: t.nav.blog, path: '/blog' },
+    { label: t.nav.wall, path: '/wall' },
+    { label: t.nav.contact, path: '/contact' },
   ];
 
-  const [activeSection, setActiveSection] = useState<string>('hero');
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 25);
-
-      if (currentRoute !== '/') return;
-
-      // 1. If user is at or near the very bottom of the document
-      const isNearBottom =
-        window.innerHeight + scrollY >= document.documentElement.scrollHeight - 250;
-      if (isNearBottom) {
-        setActiveSection('contact');
-        return;
-      }
-
-      // 2. If user is near the top of the page
-      if (scrollY < 320) {
-        setActiveSection('hero');
-        return;
-      }
-
-      // 3. Section boundary detection (from bottom of page to top)
-      const sections = [
-        { id: 'contact', section: 'contact' },
-        { id: 'wall', section: 'wall' },
-        { id: 'github', section: 'projects' },
-        { id: 'achievements', section: 'projects' },
-        { id: 'projects', section: 'projects' },
-        { id: 'skills', section: 'hero' },
-        { id: 'experience', section: 'hero' },
-        { id: 'about', section: 'hero' },
-        { id: 'hero', section: 'hero' },
-      ];
-
-      for (const sec of sections) {
-        const el = document.getElementById(sec.id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          // If section top has reached upper half of viewport
-          if (rect.top <= window.innerHeight * 0.45) {
-            setActiveSection(sec.section);
-            break;
-          }
-        }
-      }
+      setIsScrolled(window.scrollY > 25);
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentRoute]);
+  }, []);
 
-  // Compute active item index
+  // Compute active item index based on current URL route
   const activeIndex = React.useMemo(() => {
     if (currentRoute === '/') {
-      const idx = navItems.findIndex((item) => item.sectionId === activeSection);
-      return idx !== -1 ? idx : 0;
+      return 0; // Home
     }
-    const idx = navItems.findIndex(
-      (item) =>
-        currentRoute === item.path ||
-        (item.path !== '/' && currentRoute.startsWith(item.path))
-    );
-    return idx !== -1 ? idx : 0;
-  }, [currentRoute, activeSection]);
+    if (currentRoute.startsWith('/projects')) {
+      return 1; // Projects (including project detail view)
+    }
+    if (currentRoute.startsWith('/blog')) {
+      return 2; // Blog
+    }
+    if (currentRoute.startsWith('/wall')) {
+      return 3; // The Wall
+    }
+    if (currentRoute.startsWith('/contact')) {
+      return 4; // Contact
+    }
+    return 0;
+  }, [currentRoute]);
 
-  const targetIndex = hoveredIndex !== null ? hoveredIndex : (activeIndex !== -1 ? activeIndex : 0);
+  const targetIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
 
   const updateGlowPosition = useCallback(() => {
     if (greetingActive) return;
@@ -165,24 +131,15 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
   }, [updateGlowPosition]);
 
-  const { scrollToElement, scrollToTop } = useSmoothScroll();
+  const { scrollToTop } = useSmoothScroll();
 
   const handleNav = (item: (typeof navItems)[number]) => {
     setMobileMenuOpen(false);
 
-    if (currentRoute === '/') {
-      // In-page smooth scrolling on homepage
-      if (item.sectionId === 'hero') {
-        setActiveSection('hero');
-        scrollToTop(false);
-        return;
-      }
-      const el = document.getElementById(item.sectionId);
-      if (el) {
-        setActiveSection(item.sectionId);
-        scrollToElement(el, -70);
-        return;
-      }
+    // If user clicks the currently active page, scroll to top
+    if (currentRoute === item.path || (item.path === '/' && currentRoute === '/')) {
+      scrollToTop(false);
+      return;
     }
 
     onNavigate(item.path);
@@ -281,8 +238,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         </AnimatePresence>
       </motion.nav>
 
-      {/* 3. Right Fixed Actions: Command Palette Button with Shimmering ⌘K Quick Hint */}
-      <div className="hidden md:flex items-center gap-2.5 fixed top-5 right-[13%] lg:right-[15%] z-50">
+      {/* 3. Right Fixed Actions: Language Switcher & Command Palette Button */}
+      <div className="hidden md:flex items-center gap-2 fixed top-5 right-[5%] lg:right-[7%] z-50">
+        {/* Signature Glowing Globe Language Switcher */}
+        <LanguageSwitcher />
+
         <style>{`
           @keyframes cmdShimmer {
             0%, 65% {
@@ -332,12 +292,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </svg>
 
             <span className="text-xs font-medium text-zinc-400 group-hover:text-zinc-200 transition-colors">
-              Search
+              {t.nav.search}
             </span>
 
             {/* Single clean shortcut keycap */}
             <kbd className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-mono font-semibold text-zinc-400 group-hover:text-white bg-white/[0.06] group-hover:bg-primary/20 border border-white/10 group-hover:border-primary/40 rounded transition-all">
-              ⌘K
+              {t.nav.cmdK}
             </kbd>
           </button>
         </Magnetic>
@@ -352,7 +312,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative w-7 h-7 rounded-full bg-white/[0.05] border border-white/15 p-0.5 shrink-0 flex items-center justify-center shadow-[0_0_8px_rgba(244,63,94,0.3)]">
             <img
               src="/avatar-transparent.png"
-              alt="Aniket"
+              alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
               className="w-full h-full object-contain"
             />
             <span className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />
@@ -372,6 +332,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         <div className="flex items-center gap-1.5">
+          {/* Mobile Glowing Globe Button */}
+          <LanguageSwitcher showLabel={false} className="!h-8 !w-8 !p-0 !rounded-xl" />
+
           <button
             onClick={() => {
               onOpenCommandPalette();
@@ -399,7 +362,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-16 left-4 right-4 z-50 flex flex-col gap-1 rounded-2xl p-4 bg-zinc-950/95 backdrop-blur-2xl border border-zinc-800 shadow-2xl"
+            className="md:hidden fixed top-16 left-4 right-4 z-50 flex flex-col gap-1.5 rounded-2xl p-4 bg-zinc-950/95 backdrop-blur-2xl border border-zinc-800 shadow-2xl"
           >
             {navItems.map((item, idx) => (
               <button
@@ -413,6 +376,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>{item.label}</span>
               </button>
             ))}
+
+            <div className="h-px bg-white/10 my-1" />
+
+            {/* Mobile Drawer Language Selector */}
+            <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-white/[0.03] border border-white/5">
+              <span className="text-xs font-mono text-zinc-400">Language / भाषा:</span>
+              <LanguageSwitcher />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

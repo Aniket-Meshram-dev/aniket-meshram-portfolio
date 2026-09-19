@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Homepage / Core Portfolio Hub -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Projects Archive -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/projects</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Deep Project Case Study: NexLearn AI -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/projects/nexlearn-ai-autonomous-learning-platform</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Deep Project Case Study: NexPOS Enterprise -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/projects/nexpos-multi-branch-retail-management</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Deep Project Case Study: Visionary.ai -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/projects/visionary-ai-creative-career-platform</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Deep Project Case Study: CoinNova Terminal -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/projects/coinnova-cryptocurrency-trading-terminal</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Technical Architecture Journal / Blog -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/blog</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Community Interactive Canvas / The Wall -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/wall</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Contact & Direct Inquiries -->
+  <url>
+    <loc>https://aniket-meshram.pages.dev/contact</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,14 @@
+/* TEAM */
+  Creator & Engineer: Aniket Meshram
+  Role: Software Engineer & Full-Stack Developer
+  Location: Amravati, Maharashtra, India
+  GitHub: https://github.com/Aniket-Meshram-dev
+  LinkedIn: https://www.linkedin.com/in/aniket-meshram-dev/
+  Email: aniketmeshram445@gmail.com
+
+/* SITE */
+  Deployed Domain: https://aniket-meshram.pages.dev
+  Architecture: React 19, TypeScript, Vite, Tailwind CSS, Framer Motion
+  Hosting: Cloudflare Pages
+  Standards: HTML5, CSS3, ES2024, Schema.org JSON-LD
+  Last Updated: September 2026

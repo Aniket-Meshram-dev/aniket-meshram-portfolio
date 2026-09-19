@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
 import { Magnetic } from '@/components/ui/Magnetic';
 import { useSmoothScroll } from '@/context/SmoothScrollContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface FooterProps {
   onNavigate?: (route: string) => void;
@@ -10,6 +11,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const { scrollToTop } = useSmoothScroll();
+  const { t, isHindi } = useLanguage();
   const [isLaunching, setIsLaunching] = useState<boolean>(false);
 
   const handleRocketLaunch = () => {
@@ -55,7 +57,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <div className="absolute inset-x-0 -top-2 bottom-0 flex items-end justify-center pointer-events-none">
                   <img
                     src="/avatar-transparent.png"
-                    alt="Aniket"
+                    alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
                     className="w-[122%] h-[122%] max-w-none object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] group-hover:scale-110 transition-transform duration-300 ease-out"
                   />
                 </div>
@@ -65,14 +67,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </span>
             </div>
             <p className="text-xs text-zinc-400 leading-relaxed max-w-xs font-mono">
-              Software Engineer &amp; Full-Stack Developer. Building clean, high-performance web applications and modern backend systems.
+              {t.footer.tagline}
             </p>
           </div>
 
           {/* Col 2: Links */}
           <div>
             <p className="font-semibold text-sm text-white uppercase tracking-wider mb-4">
-              Links
+              {t.footer.navigation}
             </p>
             <div className="flex flex-col gap-2">
               <a
@@ -80,28 +82,35 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 href="/"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                Home
+                {t.nav.home}
               </a>
               <a
                 onClick={(e) => handleNav(e, '/projects')}
                 href="/projects"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                Projects
+                {t.nav.projects}
               </a>
               <a
                 onClick={(e) => handleNav(e, '/blog')}
                 href="/blog"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                Blog
+                {t.nav.blog}
               </a>
               <a
                 onClick={(e) => handleNav(e, '/wall')}
                 href="/wall"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                The Wall
+                {t.nav.wall}
+              </a>
+              <a
+                onClick={(e) => handleNav(e, '/contact')}
+                href="/contact"
+                className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
+              >
+                {t.nav.contact}
               </a>
             </div>
           </div>
@@ -109,7 +118,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Col 3: Legal */}
           <div>
             <p className="font-semibold text-sm text-white uppercase tracking-wider mb-4">
-              Legal
+              {isHindi ? 'कानूनी' : 'Legal'}
             </p>
             <div className="flex flex-col gap-2">
               <a
@@ -117,14 +126,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 href="/privacy"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                Privacy Policy
+                {t.footer.privacy}
               </a>
               <a
                 onClick={(e) => handleNav(e, '/terms')}
                 href="/terms"
                 className="text-sm text-zinc-400 hover:text-primary transition-colors w-fit cursor-pointer"
               >
-                Terms of Use
+                {t.footer.terms}
               </a>
             </div>
           </div>
@@ -132,7 +141,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Col 4: Social */}
           <div>
             <p className="font-semibold text-sm text-white uppercase tracking-wider mb-4">
-              Social
+              {t.footer.socials}
             </p>
             <div className="flex flex-wrap gap-2.5 max-w-[280px]">
               <a
@@ -248,7 +257,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Copyright text */}
           <p className="text-xs text-zinc-500 font-mono text-center sm:text-left">
-            © 2026 Aniket Meshram. All rights reserved.
+            © 2026 Aniket Meshram. {t.footer.copyright}
           </p>
 
           {/* Back to Top Rocket / Elevator Button */}
@@ -257,7 +266,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               type="button"
               onClick={handleRocketLaunch}
               className="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 hover:border-primary/40 text-xs font-mono text-zinc-300 hover:text-white transition-all duration-300 cursor-pointer shadow-lg overflow-hidden"
-              title="Smooth elevator scroll to top"
+              title={isHindi ? 'शीर्ष पर वापस जाएं' : 'Smooth elevator scroll to top'}
               data-cursor="pointer"
             >
               {/* Flame glow effect on launch */}
@@ -294,7 +303,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </motion.svg>
               </span>
 
-              <span>Back to Top</span>
+              <span>{isHindi ? 'वापस ऊपर' : 'Back to Top'}</span>
 
               <svg
                 className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white group-hover:-translate-y-0.5 transition-transform"

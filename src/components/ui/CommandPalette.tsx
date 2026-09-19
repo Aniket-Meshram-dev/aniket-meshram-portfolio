@@ -13,6 +13,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { PORTFOLIO_DATA } from '@/data/portfolioData';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
   onNavigate,
 }) => {
+  const { t, language, toggleLanguage, isHindi } = useLanguage();
   const [search, setSearch] = useState('');
 
   // Handle Cmd+K & Escape keyboard shortcuts
@@ -50,11 +52,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   }, [isOpen]);
 
   const navPages = [
-    { label: 'Home', path: '/', icon: Home },
-    { label: 'Projects', path: '/projects', icon: FolderKanban },
-    { label: 'Blog', path: '/blog', icon: BookOpen },
-    { label: 'The Wall', path: '/wall', icon: PenTool },
-    { label: 'Contact', path: '/contact', icon: MessageSquare },
+    { label: t.nav.home, path: '/', icon: Home },
+    { label: t.nav.projects, path: '/projects', icon: FolderKanban },
+    { label: t.nav.blog, path: '/blog', icon: BookOpen },
+    { label: t.nav.wall, path: '/wall', icon: PenTool },
+    { label: t.nav.contact, path: '/contact', icon: MessageSquare },
   ];
 
   const socials = [
@@ -171,7 +173,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   <input
                     type="text"
                     autoFocus
-                    placeholder="Jump to a project..."
+                    placeholder={t.cmd.placeholder}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--color-bg-secondary)] dark:bg-white/[0.06] border border-[var(--color-border)] text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-tertiary)] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/60 transition-all"
@@ -186,19 +188,20 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   }}
                   className="shrink-0 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.06] text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all cursor-pointer whitespace-nowrap"
                 >
-                  Reach out
+                  {t.nav.contact}
                 </button>
 
                 {/* Language Toggle button */}
                 <button
-                  onClick={() => {
-                    alert('Arabic language version coming soon!');
-                  }}
-                  className="shrink-0 w-10 h-10 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.06] flex items-center justify-center text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all cursor-pointer"
-                  aria-label="Language"
-                  title="Toggle Language"
+                  onClick={toggleLanguage}
+                  className="shrink-0 px-3 h-10 rounded-xl border border-pink-500/50 bg-[#0c0d14] flex items-center gap-1.5 text-xs font-mono text-zinc-200 hover:text-white hover:border-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)] transition-all cursor-pointer"
+                  aria-label="Toggle Language"
+                  title={language === 'hi' ? 'Switch to English' : 'हिन्दी में बदलें'}
                 >
-                  <Globe className="w-4 h-4" />
+                  <Globe className="w-3.5 h-3.5 text-white" />
+                  <span className="font-semibold text-pink-400">
+                    {language === 'hi' ? 'EN' : 'हिन्दी'}
+                  </span>
                 </button>
               </div>
 
@@ -286,7 +289,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     {/* 1. PAGES (2-Column Grid matching aniketmeshram.me) */}
                     <div>
                       <p className="text-[11px] font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider mb-2.5 px-1">
-                        Pages
+                        {isHindi ? 'पृष्ठ' : 'Pages'}
                       </p>
                       <div className="grid grid-cols-2 gap-2">
                         {navPages.map((page) => {
@@ -313,7 +316,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     {/* 2. CONNECT (Social Links matching aniketmeshram.me) */}
                     <div>
                       <p className="text-[11px] font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider mb-2.5 px-1">
-                        Connect
+                        {t.footer.socials}
                       </p>
                       <div className="flex items-center gap-2 flex-wrap">
                         {socials.map((soc) => (
@@ -336,7 +339,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     {/* 3. LEGAL (Privacy & Terms matching aniketmeshram.me) */}
                     <div>
                       <p className="text-[11px] font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider mb-2.5 px-1">
-                        Legal
+                        {isHindi ? 'कानूनी' : 'Legal'}
                       </p>
                       <div className="flex items-center gap-2 flex-wrap">
                         <button
@@ -347,7 +350,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           className="sheet-item flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.04] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all text-sm font-medium cursor-pointer"
                         >
                           <Shield className="w-4 h-4" />
-                          <span>Privacy Policy</span>
+                          <span>{t.footer.privacy}</span>
                         </button>
                         <button
                           onClick={() => {
@@ -357,7 +360,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           className="sheet-item flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] dark:bg-white/[0.04] text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-tertiary)] transition-all text-sm font-medium cursor-pointer"
                         >
                           <FileText className="w-4 h-4" />
-                          <span>Terms of Use</span>
+                          <span>{t.footer.terms}</span>
                         </button>
                       </div>
                     </div>

@@ -1,0 +1,12 @@
+# Robots.txt for Aniket Meshram Portfolio
+# https://aniket-meshram.pages.dev
+
+User-agent: *
+Allow: /
+
+# Disallow draft or internal assets if any
+Disallow: /api/
+Disallow: /scratch/
+
+# Sitemap Location
+Sitemap: https://aniket-meshram.pages.dev/sitemap.xml

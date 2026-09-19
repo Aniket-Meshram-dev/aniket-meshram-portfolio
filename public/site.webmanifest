@@ -1,0 +1,31 @@
+{
+  "name": "Aniket Meshram | Software Engineer & Full-Stack Developer",
+  "short_name": "Aniket M.",
+  "description": "Official portfolio of Aniket Meshram, Software Engineer & Full-Stack Developer specializing in high-performance web applications, distributed architectures, and AI systems.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/avatar-transparent.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/avatar-transparent.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["education", "technology", "portfolio"]
+}

@@ -100,6 +100,36 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ── Hindi & Devanagari Typographic System ── */
+html[lang="hi"],
+.lang-hi,
+[lang="hi"] {
+  font-family: 'Noto Sans Devanagari', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: normal !important;
+}
+
+html[lang="hi"] h1,
+html[lang="hi"] h2,
+html[lang="hi"] h3,
+html[lang="hi"] .hero-name,
+.lang-hi h1,
+.lang-hi h2,
+.lang-hi h3 {
+  letter-spacing: 0.01em !important;
+  line-height: 1.32 !important;
+}
+
+html[lang="hi"] p,
+.lang-hi p {
+  line-height: 1.65 !important;
+}
+
+html[lang="hi"] .hero-name {
+  font-size: clamp(1.65rem, 5.8vw, 5.4rem) !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.02em !important;
+}
+
 /* Lenis Smooth Scroll Foundation */
 html.lenis, html.lenis body {
   height: auto;
