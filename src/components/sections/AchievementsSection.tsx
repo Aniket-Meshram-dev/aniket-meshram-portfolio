@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { PORTFOLIO_DATA, Achievement } from '../../data/portfolioData';
 import { HolographicCertificateModal } from '../ui/HolographicCertificateModal';
 import { ExternalLink, Maximize2 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export const AchievementsSection: React.FC = () => {
+  const { t } = useLanguage();
   const achievements = PORTFOLIO_DATA.achievements;
   const containerRef = useRef<HTMLElement>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<Achievement | null>(null);
@@ -30,7 +32,7 @@ export const AchievementsSection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
         >
-          Achievements
+          {t.achievementsSection.heading}
         </motion.h2>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -128,7 +130,7 @@ export const AchievementsSection: React.FC = () => {
                         style={{ color: item.color }}
                       >
                         <Maximize2 className="w-3.5 h-3.5" />
-                        <span>View Certificate</span>
+                        <span>{t.achievementsSection.viewCertificate}</span>
                       </button>
 
                       {/* External Verification Portal */}
@@ -141,7 +143,7 @@ export const AchievementsSection: React.FC = () => {
                           className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-text-secondary)] hover:text-white hover:underline transition-colors"
                           title="Verify on issuer verification portal"
                         >
-                          <span>Verify</span>
+                          <span>{t.achievementsSection.verify}</span>
                           <ExternalLink className="w-3 h-3" />
                         </a>
                       )}
@@ -158,7 +160,7 @@ export const AchievementsSection: React.FC = () => {
                           title="Click to copy Credential ID"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                          <span>ID: {item.certificateId.slice(0, 8)}...</span>
+                          <span>{t.achievementsSection.idPrefix} {item.certificateId.slice(0, 8)}...</span>
                         </button>
                       )}
                     </div>

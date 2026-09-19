@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent, type MotionValue } from 'framer-motion';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface TechBrand {
   bg: string;
@@ -12,17 +13,25 @@ interface TechBrand {
 const TECH_BRAND_COLORS: Record<string, TechBrand> = {
   'Python': { bg: 'rgba(55, 118, 171, 0.16)', border: 'rgba(55, 118, 171, 0.65)', text: '#38bdf8', glow: 'rgba(55, 118, 171, 0.45)' },
   'Machine Learning': { bg: 'rgba(255, 111, 97, 0.16)', border: 'rgba(255, 111, 97, 0.65)', text: '#fb7185', glow: 'rgba(255, 111, 97, 0.45)' },
+  'मशीन लर्निंग': { bg: 'rgba(255, 111, 97, 0.16)', border: 'rgba(255, 111, 97, 0.65)', text: '#fb7185', glow: 'rgba(255, 111, 97, 0.45)' },
   'Neural Networks': { bg: 'rgba(139, 92, 246, 0.16)', border: 'rgba(139, 92, 246, 0.65)', text: '#c084fc', glow: 'rgba(139, 92, 246, 0.45)' },
+  'न्यूरल नेटवर्क्स': { bg: 'rgba(139, 92, 246, 0.16)', border: 'rgba(139, 92, 246, 0.65)', text: '#c084fc', glow: 'rgba(139, 92, 246, 0.45)' },
   'Java': { bg: 'rgba(237, 139, 0, 0.16)', border: 'rgba(237, 139, 0, 0.65)', text: '#fb923c', glow: 'rgba(237, 139, 0, 0.45)' },
   'Spring Boot': { bg: 'rgba(109, 179, 63, 0.16)', border: 'rgba(109, 179, 63, 0.65)', text: '#4ade80', glow: 'rgba(109, 179, 63, 0.45)' },
   'PostgreSQL': { bg: 'rgba(51, 103, 145, 0.16)', border: 'rgba(51, 103, 145, 0.65)', text: '#60a5fa', glow: 'rgba(51, 103, 145, 0.45)' },
   'Cybersecurity': { bg: 'rgba(16, 185, 129, 0.16)', border: 'rgba(16, 185, 129, 0.65)', text: '#34d399', glow: 'rgba(16, 185, 129, 0.45)' },
+  'साइबर सुरक्षा': { bg: 'rgba(16, 185, 129, 0.16)', border: 'rgba(16, 185, 129, 0.65)', text: '#34d399', glow: 'rgba(16, 185, 129, 0.45)' },
   'Zero Trust': { bg: 'rgba(6, 182, 212, 0.16)', border: 'rgba(6, 182, 212, 0.65)', text: '#22d3ee', glow: 'rgba(6, 182, 212, 0.45)' },
+  'जीरो ट्रस्ट': { bg: 'rgba(6, 182, 212, 0.16)', border: 'rgba(6, 182, 212, 0.65)', text: '#22d3ee', glow: 'rgba(6, 182, 212, 0.45)' },
   'Network Security': { bg: 'rgba(59, 130, 246, 0.16)', border: 'rgba(59, 130, 246, 0.65)', text: '#60a5fa', glow: 'rgba(59, 130, 246, 0.45)' },
+  'नेटवर्क सुरक्षा': { bg: 'rgba(59, 130, 246, 0.16)', border: 'rgba(59, 130, 246, 0.65)', text: '#60a5fa', glow: 'rgba(59, 130, 246, 0.45)' },
   'Threat Defense': { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.65)', text: '#f87171', glow: 'rgba(239, 68, 68, 0.45)' },
+  'थ्रेट डिफेंस': { bg: 'rgba(239, 68, 68, 0.16)', border: 'rgba(239, 68, 68, 0.65)', text: '#f87171', glow: 'rgba(239, 68, 68, 0.45)' },
   'Full Stack': { bg: 'rgba(236, 72, 153, 0.16)', border: 'rgba(236, 72, 153, 0.65)', text: '#f472b6', glow: 'rgba(236, 72, 153, 0.45)' },
+  'फुल स्टैक': { bg: 'rgba(236, 72, 153, 0.16)', border: 'rgba(236, 72, 153, 0.65)', text: '#f472b6', glow: 'rgba(236, 72, 153, 0.45)' },
   'AICTE': { bg: 'rgba(245, 158, 11, 0.16)', border: 'rgba(245, 158, 11, 0.65)', text: '#fbbf24', glow: 'rgba(245, 158, 11, 0.45)' },
   'Grade O': { bg: 'rgba(16, 185, 129, 0.16)', border: 'rgba(16, 185, 129, 0.65)', text: '#34d399', glow: 'rgba(16, 185, 129, 0.45)' },
+  'ग्रेड O': { bg: 'rgba(16, 185, 129, 0.16)', border: 'rgba(16, 185, 129, 0.65)', text: '#34d399', glow: 'rgba(16, 185, 129, 0.45)' },
   'Next.js': { bg: 'rgba(255, 255, 255, 0.12)', border: 'rgba(255, 255, 255, 0.5)', text: '#ffffff', glow: 'rgba(255, 255, 255, 0.4)' },
   'WebSockets': { bg: 'rgba(240, 80, 50, 0.16)', border: 'rgba(240, 80, 50, 0.65)', text: '#fb7185', glow: 'rgba(240, 80, 50, 0.45)' },
 };
@@ -121,7 +130,22 @@ const CircuitTrace: React.FC<CircuitTraceProps> = ({ side, progress, color, isLo
 };
 
 export const ExperienceSection: React.FC = () => {
-  const experiences = PORTFOLIO_DATA.experiences;
+  const { t } = useLanguage();
+  const rawExperiences = PORTFOLIO_DATA.experiences;
+
+  // Seamlessly merge localized strings with experience icons, colors, and layout props
+  const experiences = rawExperiences.map((exp, idx) => {
+    const loc = t.experience?.items?.[idx] || t.experience?.items?.find((item) => item.id === exp.id);
+    return {
+      ...exp,
+      role: loc?.role || exp.role,
+      company: loc?.company || exp.company,
+      period: loc?.period || exp.period,
+      description: loc?.description || exp.description,
+      skills: loc?.skills || exp.skills,
+    };
+  });
+
   const containerRef = useRef<HTMLDivElement>(null);
   const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -211,7 +235,7 @@ export const ExperienceSection: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
           >
-            Experience
+            {t.experience.heading}
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -351,7 +375,7 @@ export const ExperienceSection: React.FC = () => {
                             boxShadow: isLocked ? `0 0 8px ${exp.color}` : 'none',
                           }}
                         />
-                        {isLocked ? 'NODE CONNECTED' : 'STANDBY'}
+                        {isLocked ? t.experience.nodeConnected : t.experience.standby}
                       </span>
                     </div>
 

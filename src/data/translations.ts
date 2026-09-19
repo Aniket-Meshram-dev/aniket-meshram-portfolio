@@ -58,6 +58,32 @@ export interface TranslationDictionary {
     experienceHeading: string;
     skillsHeading: string;
   };
+  experience: {
+    heading: string;
+    nodeConnected: string;
+    standby: string;
+    items: {
+      id: string;
+      role: string;
+      company: string;
+      period: string;
+      description: string;
+      skills: string;
+    }[];
+  };
+  skillsSection: {
+    heading: string;
+    dragPrompt: string;
+  };
+  achievementsSection: {
+    heading: string;
+    viewCertificate: string;
+    verify: string;
+    idPrefix: string;
+  };
+  githubSection: {
+    heading: string;
+  };
   projects: {
     sectionBadge: string;
     heading: string;
@@ -248,6 +274,53 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       },
       experienceHeading: 'Professional Experience & Virtual Internships',
       skillsHeading: 'Core Competencies & Technology Stack',
+    },
+    experience: {
+      heading: 'Experience',
+      nodeConnected: 'NODE CONNECTED',
+      standby: 'STANDBY',
+      items: [
+        {
+          id: 'exp-google-aiml',
+          role: 'AI-ML Virtual Intern',
+          company: 'Google for Developers & EduSkills / AICTE',
+          period: 'JAN 2026 – MAR 2026',
+          description:
+            'Completed an intensive 10-week AI-ML virtual internship supported by Google for Developers (India Edu Program) and the Ministry of Education / AICTE. Engineered machine learning models, trained neural network pipelines, and achieved an Outstanding (Grade O) rating.',
+          skills: 'Machine Learning · Python · Neural Networks · AICTE · Grade O',
+        },
+        {
+          id: 'exp-eduskills-java',
+          role: 'Java Full Stack Developer Intern',
+          company: 'EduSkills Academy & AICTE (Ministry of Education)',
+          period: 'APR 2026 – JUN 2026',
+          description:
+            'Engineered full-stack Java solutions across an 8-week virtual internship. Built Spring Boot REST APIs, relational PostgreSQL databases, and modern interactive frontends, graduating with Outstanding (Grade O) distinction.',
+          skills: 'Java · Spring Boot · PostgreSQL · Full Stack · Grade O',
+        },
+        {
+          id: 'exp-paloalto-cyber',
+          role: 'Cybersecurity Virtual Intern',
+          company: 'Palo Alto Networks & EduSkills / AICTE',
+          period: 'JUL 2025 – SEP 2025',
+          description:
+            'Completed a 10-week cybersecurity engineering virtual internship supported by Palo Alto Networks and AICTE NEAT Cell. Implemented security policies, zero-trust architectures, network traffic inspection, and threat mitigation.',
+          skills: 'Cybersecurity · Zero Trust · Network Security · Threat Defense',
+        },
+      ],
+    },
+    skillsSection: {
+      heading: 'Skills',
+      dragPrompt: '✦ Drag to spin the sphere',
+    },
+    achievementsSection: {
+      heading: 'Achievements',
+      viewCertificate: 'View Certificate',
+      verify: 'Verify',
+      idPrefix: 'ID:',
+    },
+    githubSection: {
+      heading: 'Code & Contributions',
     },
     projects: {
       sectionBadge: 'FLAGSHIP PLATFORMS // 2025 – 2026',
@@ -441,6 +514,53 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       },
       experienceHeading: 'व्यावसायिक अनुभव एवं वर्चुअल इंटर्नशिप्स',
       skillsHeading: 'मूल तकनीकी क्षमताएं एवं स्टैक',
+    },
+    experience: {
+      heading: 'व्यावसायिक अनुभव',
+      nodeConnected: 'नोड कनेक्टेड',
+      standby: 'स्टैंडबाय',
+      items: [
+        {
+          id: 'exp-google-aiml',
+          role: 'एआई-एमएल वर्चुअल इंटर्न',
+          company: 'Google for Developers और EduSkills / AICTE',
+          period: 'जनवरी 2026 – मार्च 2026',
+          description:
+            'Google for Developers (India Edu Program) और शिक्षा मंत्रालय / AICTE द्वारा समर्थित 10-सप्ताह की गहन AI-ML वर्चुअल इंटर्नशिप सफलतापूर्वक पूरी की। मशीन लर्निंग मॉडल्स तैयार किए, न्यूरल नेटवर्क पाइपलाइन्स को ट्रेन किया और आउटस्टैंडिंग (ग्रेड O) रेटिंग प्राप्त की।',
+          skills: 'मशीन लर्निंग · Python · न्यूरल नेटवर्क्स · AICTE · ग्रेड O',
+        },
+        {
+          id: 'exp-eduskills-java',
+          role: 'जावा फुल स्टैक डेवलपर इंटर्न',
+          company: 'EduSkills Academy और AICTE (शिक्षा मंत्रालय)',
+          period: 'अप्रैल 2026 – जून 2026',
+          description:
+            '8-सप्ताह की वर्चुअल इंटर्नशिप के दौरान फुल-स्टैक जावा सॉल्यूशंस का निर्माण किया। Spring Boot REST APIs, रिलेशनल PostgreSQL डेटाबेस और आधुनिक इंटरैक्टिव फ्रंटएंड्स विकसित किए, तथा आउटस्टैंडिंग (ग्रेड O) विशिष्टता के साथ उत्तीर्ण हुए।',
+          skills: 'Java · Spring Boot · PostgreSQL · फुल स्टैक · ग्रेड O',
+        },
+        {
+          id: 'exp-paloalto-cyber',
+          role: 'साइबर सुरक्षा वर्चुअल इंटर्न',
+          company: 'Palo Alto Networks और EduSkills / AICTE',
+          period: 'जुलाई 2025 – सितंबर 2025',
+          description:
+            'Palo Alto Networks और AICTE NEAT Cell द्वारा समर्थित 10-सप्ताह की साइबर सुरक्षा इंजीनियरिंग वर्चुअल इंटर्नशिप पूरी की। सुरक्षा नीतियां, जीरो-ट्रस्ट आर्किटेक्चर, नेटवर्क ट्रैफिक निरीक्षण और थ्रेट मिटिगेशन लागू किए।',
+          skills: 'साइबर सुरक्षा · जीरो ट्रस्ट · नेटवर्क सुरक्षा · थ्रेट डिफेंस',
+        },
+      ],
+    },
+    skillsSection: {
+      heading: 'तकनीकी कौशल',
+      dragPrompt: '✦ घुमाने के लिए ड्रैग करें',
+    },
+    achievementsSection: {
+      heading: 'उपलब्धियां एवं प्रमाणपत्र',
+      viewCertificate: 'प्रमाणपत्र देखें',
+      verify: 'सत्यापित करें',
+      idPrefix: 'आईडी:',
+    },
+    githubSection: {
+      heading: 'कोड एवं योगदान',
     },
     projects: {
       sectionBadge: 'प्रमुख प्लेटफॉर्म्स // 2025 – 2026',

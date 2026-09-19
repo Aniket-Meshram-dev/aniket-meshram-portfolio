@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TechOrbitalSphere } from '@/components/ui/TechOrbitalSphere';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface SkillItem {
   name: string;
@@ -236,6 +237,8 @@ const HolographicSkillCard: React.FC<HolographicSkillCardProps> = ({ skill }) =>
 };
 
 export const SkillsSection: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="skills" className="py-20 md:py-28 w-full">
       {/* 1. Header */}
@@ -247,7 +250,7 @@ export const SkillsSection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
         >
-          Skills
+          {t.skillsSection.heading}
         </motion.h2>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -272,7 +275,7 @@ export const SkillsSection: React.FC = () => {
           >
             <TechOrbitalSphere />
             <p className="text-center text-xs text-[var(--color-text-tertiary)] mt-2 select-none">
-              ✦ Drag to spin the sphere
+              {t.skillsSection.dragPrompt}
             </p>
           </motion.div>
 

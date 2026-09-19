@@ -7,6 +7,7 @@ import {
   MonthSegment,
 } from '@/services/githubService';
 import { HEATMAP_LEVEL_COLORS } from '@/data/githubData';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Counter: React.FC<{ end: number; duration?: number }> = ({
   end,
@@ -235,6 +236,7 @@ export const GitHubSection: React.FC = () => {
     };
   }, [hoveredCell]);
 
+  const { t } = useLanguage();
   const username = githubData?.username || 'Aniket-Meshram-dev';
   const profileUrl = githubData?.profile?.html_url || `https://github.com/${username}`;
   const totalContributions = currentDataset?.totalContributions || 0;
@@ -276,7 +278,7 @@ export const GitHubSection: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="text-3xl md:text-4xl font-bold text-[var(--color-text)]"
             >
-              Code &amp; Contributions
+              {t.githubSection.heading}
             </motion.h2>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
