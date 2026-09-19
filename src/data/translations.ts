@@ -80,6 +80,24 @@ export interface TranslationDictionary {
     viewCertificate: string;
     verify: string;
     idPrefix: string;
+    tiltHint: string;
+    verifiedCredential: string;
+    copied: string;
+    foilOn: string;
+    foilOff: string;
+    resetTilt: string;
+    verifyPortal: string;
+    download: string;
+    openPdf: string;
+    officialCredential: string;
+    items: {
+      id: string;
+      title: string;
+      organization: string;
+      date: string;
+      description: string;
+      grade?: string;
+    }[];
   };
   githubSection: {
     heading: string;
@@ -318,6 +336,85 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       viewCertificate: 'View Certificate',
       verify: 'Verify',
       idPrefix: 'ID:',
+      tiltHint: 'Move cursor to tilt 3D holographic foil',
+      verifiedCredential: 'Verified Institutional Credential',
+      copied: 'Copied!',
+      foilOn: 'Foil ON',
+      foilOff: 'Foil OFF',
+      resetTilt: 'Reset Tilt',
+      verifyPortal: 'Verify Portal',
+      download: 'Download',
+      openPdf: 'Open PDF',
+      officialCredential: 'OFFICIAL CREDENTIAL',
+      items: [
+        {
+          id: 'cert-ai-ml-google',
+          title: 'AI-ML Virtual Internship (10-Weeks)',
+          organization: 'Google for Developers (India Edu Program) & EduSkills / AICTE',
+          date: 'Jan – Mar 2026',
+          description:
+            'Successfully completed the 10-week AI-ML Virtual Internship supported by Google for Developers India Edu Program, Ministry of Education, and AICTE with Grade O (Outstanding).',
+          grade: 'Grade O (Outstanding)',
+        },
+        {
+          id: 'cert-java-fullstack',
+          title: 'Java Full Stack Development With Project Virtual Internship',
+          organization: 'EduSkills Academy & AICTE (Ministry of Education)',
+          date: 'Apr – Jun 2026',
+          description:
+            'Successfully completed the 8-week Java Full Stack Development With Project Virtual Internship supported by EduSkills Academy and AICTE with Grade O (Outstanding).',
+          grade: 'Grade O (Outstanding)',
+        },
+        {
+          id: 'cert-cybersecurity-paloalto',
+          title: 'Cybersecurity Virtual Internship (10 Weeks)',
+          organization: 'Palo Alto Networks & EduSkills / AICTE',
+          date: 'Jul – Sep 2025',
+          description:
+            'Successfully completed 10 weeks of Cybersecurity Virtual Internship supported by Palo Alto Networks and AICTE NEAT Cell with Grade B (Good).',
+          grade: 'Grade B (Good)',
+        },
+        {
+          id: 'cert-dsa-amazon',
+          title: 'Data Structures and Algorithms',
+          organization: 'Amazon (Offered via Coursera)',
+          date: 'Apr 15, 2025',
+          description:
+            'Online course authorized by Amazon covering fundamental and advanced data structures, algorithmic complexity, sorting, graphs, and dynamic programming.',
+        },
+        {
+          id: 'cert-java-amazon',
+          title: 'Programming with Java',
+          organization: 'Amazon (Offered via Coursera)',
+          date: 'Apr 11, 2025',
+          description:
+            'Professional course authorized by Amazon covering modern Java syntax, OOP inheritance, encapsulation, interfaces, collections framework, and robust error handling.',
+        },
+        {
+          id: 'cert-intro-sw-amazon',
+          title: 'Introduction to Software Development',
+          organization: 'Amazon (Offered via Coursera)',
+          date: 'Apr 6, 2025',
+          description:
+            'Foundational software engineering course authorized by Amazon covering Agile workflows, software lifecycle stages, modular code architecture, and testing.',
+        },
+        {
+          id: 'cert-html5-infosys',
+          title: 'HTML5 - The Language',
+          organization: 'Infosys Springboard',
+          date: 'Jun 4, 2025',
+          description:
+            'Professional course certification in modern semantic HTML5, accessible markup, forms, media APIs, and modern web specifications.',
+        },
+        {
+          id: 'cert-css3-infosys',
+          title: 'CSS3',
+          organization: 'Infosys Springboard',
+          date: 'Jun 6, 2025',
+          description:
+            'Professional course certification in responsive layout systems, Flexbox, CSS Grid, custom properties, and GPU-accelerated micro-animations.',
+        },
+      ],
     },
     githubSection: {
       heading: 'Code & Contributions',
@@ -558,6 +655,85 @@ export const TRANSLATIONS: Record<Language, TranslationDictionary> = {
       viewCertificate: 'प्रमाणपत्र देखें',
       verify: 'सत्यापित करें',
       idPrefix: 'आईडी:',
+      tiltHint: '3D होलोग्राफिक फ़ॉइल देखने हेतु कर्सर घुमाएं',
+      verifiedCredential: 'सत्यापित आधिकारिक प्रमाणपत्र',
+      copied: 'कॉपी किया गया!',
+      foilOn: 'फ़ॉइल चालू',
+      foilOff: 'फ़ॉइल बंद',
+      resetTilt: 'रीसेट टिल्ट',
+      verifyPortal: 'सत्यापन पोर्टल',
+      download: 'डाउनलोड',
+      openPdf: 'पीडीएफ खोलें',
+      officialCredential: 'आधिकारिक प्रमाणपत्र',
+      items: [
+        {
+          id: 'cert-ai-ml-google',
+          title: 'एआई-एमएल वर्चुअल इंटर्नशिप (10-सप्ताह)',
+          organization: 'Google for Developers (India Edu Program) और EduSkills / AICTE',
+          date: 'जनवरी – मार्च 2026',
+          description:
+            'Google for Developers India Edu Program, शिक्षा मंत्रालय और AICTE द्वारा समर्थित 10-सप्ताह की AI-ML वर्चुअल इंटर्नशिप ग्रेड O (आउटस्टैंडिंग) के साथ सफलतापूर्वक पूर्ण की।',
+          grade: 'ग्रेड O (आउटस्टैंडिंग)',
+        },
+        {
+          id: 'cert-java-fullstack',
+          title: 'जावा फुल स्टैक डेवलपमेंट विथ प्रोजेक्ट वर्चुअल इंटर्नशिप',
+          organization: 'EduSkills Academy और AICTE (शिक्षा मंत्रालय)',
+          date: 'अप्रैल – जून 2026',
+          description:
+            'EduSkills Academy और AICTE द्वारा समर्थित 8-सप्ताह की जावा फुल स्टैक डेवलपमेंट विथ प्रोजेक्ट वर्चुअल इंटर्नशिप ग्रेड O (आउटस्टैंडिंग) के साथ सफलतापूर्वक पूर्ण की।',
+          grade: 'ग्रेड O (आउटस्टैंडिंग)',
+        },
+        {
+          id: 'cert-cybersecurity-paloalto',
+          title: 'साइबर सुरक्षा वर्चुअल इंटर्नशिप (10-सप्ताह)',
+          organization: 'Palo Alto Networks और EduSkills / AICTE',
+          date: 'जुलाई – सितंबर 2025',
+          description:
+            'Palo Alto Networks और AICTE NEAT Cell द्वारा समर्थित 10-सप्ताह की साइबर सुरक्षा इंजीनियरिंग वर्चुअल इंटर्नशिप ग्रेड B (गुड) के साथ सफलतापूर्वक पूर्ण की।',
+          grade: 'ग्रेड B (गुड)',
+        },
+        {
+          id: 'cert-dsa-amazon',
+          title: 'डेटा स्ट्रक्चर्स एंड एल्गोरिदम्स (DSA)',
+          organization: 'Amazon (Coursera के माध्यम से)',
+          date: '15 अप्रैल, 2025',
+          description:
+            'Amazon द्वारा अधिकृत प्रोफेशनल कोर्स — डेटा संरचनाएं, एल्गोरिदम जटिलता, सॉर्टिंग, ग्राफ्स और डायनामिक प्रोग्रामिंग का गहन अध्ययन।',
+        },
+        {
+          id: 'cert-java-amazon',
+          title: 'प्रोग्रामिंग विथ जावा',
+          organization: 'Amazon (Coursera के माध्यम से)',
+          date: '11 अप्रैल, 2025',
+          description:
+            'Amazon द्वारा अधिकृत व्यावसायिक कोर्स — आधुनिक जावा सिंटैक्स, ऑब्जेक्ट ओरिएंटेड प्रोग्रामिंग, इनहेरिटेंस, कलेक्शन्स फ्रेमवर्क और एरर हैंडलिंग।',
+        },
+        {
+          id: 'cert-intro-sw-amazon',
+          title: 'सॉफ्टवेयर डेवलपमेंट का परिचय',
+          organization: 'Amazon (Coursera के माध्यम से)',
+          date: '6 अप्रैल, 2025',
+          description:
+            'Amazon द्वारा अधिकृत सॉफ्टवेयर इंजीनियरिंग कोर्स — एजाइल वर्कफ़्लोज़, सॉफ्टवेयर लाइफसाइकिल (SDLC), मॉड्यूलर आर्किटेक्चर और टेस्टिंग।',
+        },
+        {
+          id: 'cert-html5-infosys',
+          title: 'HTML5 - द लैंग्वेज',
+          organization: 'Infosys Springboard',
+          date: '4 जून, 2025',
+          description:
+            'आधुनिक सेमेंटिक HTML5, एक्सेसिबल मार्कअप, फॉर्म्स, मीडिया एपीआई और आधुनिक वेब स्पेसिफिकेशन्स में पेशेवर कोर्स प्रमाणन।',
+        },
+        {
+          id: 'cert-css3-infosys',
+          title: 'CSS3 (सीएसएस3)',
+          organization: 'Infosys Springboard',
+          date: '6 जून, 2025',
+          description:
+            'रिस्पॉन्सिव लेआउट सिस्टम्स, फ्लेक्सबॉक्स, सीएसएस ग्रिड, कस्टम प्रॉपर्टीज और जीपीयू-त्वरित माइक्रो-एनिमेशन्स में पेशेवर कोर्स प्रमाणन।',
+        },
+      ],
     },
     githubSection: {
       heading: 'कोड एवं योगदान',

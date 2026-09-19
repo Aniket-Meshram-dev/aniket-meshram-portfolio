@@ -15,6 +15,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import { Achievement } from '../../data/portfolioData';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface HolographicCertificateModalProps {
   isOpen: boolean;
@@ -31,6 +32,13 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
   certificates = [],
   onSelectCertificate,
 }) => {
+  const { t } = useLanguage();
+  const activeLoc = certificate ? t.achievementsSection?.items?.find((c) => c.id === certificate.id) : null;
+  const activeTitle = activeLoc?.title || certificate?.title;
+  const activeOrg = activeLoc?.organization || certificate?.organization;
+  const activeDate = activeLoc?.date || certificate?.date;
+  const activeGrade = activeLoc?.grade || certificate?.grade;
+
   const cardRef = useRef<HTMLDivElement>(null);
   const [copied, setCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -182,7 +190,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-sm md:text-base font-bold text-white truncate">
-                      {certificate.title}
+                      {activeTitle}
                     </h3>
                     {/* Real-time Verification Badge */}
                     <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
@@ -190,13 +198,13 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                       </span>
-                      <span>Verified Credential</span>
+                      <span>{t.achievementsSection.verifiedCredential}</span>
                       <ShieldCheck className="w-3 h-3 text-emerald-400" />
                     </div>
                   </div>
 
                   <p className="text-xs text-white/50 truncate">
-                    {certificate.organization} · {certificate.date}
+                    {activeOrg} · {activeDate}
                   </p>
                 </div>
               </div>
@@ -340,7 +348,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                       style={{ color: foilAccentColor, animationDuration: '8s' }}
                     />
                     <span className="text-[10px] font-black tracking-wider uppercase text-white/90">
-                      {certificate.grade || 'OFFICIAL CREDENTIAL'}
+                      {activeGrade || t.achievementsSection.officialCredential}
                     </span>
                   </div>
                 </div>
@@ -349,7 +357,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
               {/* 3D Tilt Helper Hint */}
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none px-3 py-1 rounded-full bg-black/60 border border-white/10 backdrop-blur-md flex items-center gap-1.5 text-[11px] text-white/60">
                 <RotateCcw className="w-3 h-3 text-white/40" />
-                <span>Move cursor to tilt 3D holographic foil</span>
+                <span>{t.achievementsSection.tiltHint}</span>
               </div>
             </div>
 
@@ -363,16 +371,16 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-white/80 hover:text-white transition-all cursor-pointer group"
                     title="Click to copy Credential ID"
                   >
-                    <span>ID: {certificate.certificateId}</span>
+                    <span>{t.achievementsSection.idPrefix} {certificate.certificateId}</span>
                     {copied ? (
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
                     ) : (
                       <Copy className="w-3.5 h-3.5 text-white/40 group-hover:text-white/80" />
                     )}
-                    {copied && <span className="text-emerald-400 font-sans text-[11px]">Copied!</span>}
+                    {copied && <span className="text-emerald-400 font-sans text-[11px]">{t.achievementsSection.copied}</span>}
                   </button>
                 ) : (
-                  <span className="text-xs text-white/40 font-mono">Verified Institutional Credential</span>
+                  <span className="text-xs text-white/40 font-mono">{t.achievementsSection.verifiedCredential}</span>
                 )}
               </div>
 
@@ -388,7 +396,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                   title="Toggle 3D Holographic Foil Reflection"
                 >
                   <Sparkles className="w-3 h-3" />
-                  <span>Foil {showFoilEffect ? 'ON' : 'OFF'}</span>
+                  <span>{showFoilEffect ? t.achievementsSection.foilOn : t.achievementsSection.foilOff}</span>
                 </button>
 
                 <button
@@ -397,7 +405,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                   title="Reset 3D tilt orientation"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Reset Tilt</span>
+                  <span>{t.achievementsSection.resetTilt}</span>
                 </button>
 
                 {certificate.verificationUrl && (
@@ -407,7 +415,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                     rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-xs font-semibold text-emerald-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
                   >
-                    <span>Verify Portal</span>
+                    <span>{t.achievementsSection.verifyPortal}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 )}
@@ -420,7 +428,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                     title="Download original certificate document"
                   >
                     <Download className="w-3 h-3" />
-                    <span>Download</span>
+                    <span>{t.achievementsSection.download}</span>
                   </a>
                 )}
 
@@ -434,7 +442,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                       backgroundColor: foilAccentColor,
                     }}
                   >
-                    <span>Open PDF</span>
+                    <span>{t.achievementsSection.openPdf}</span>
                     <Maximize2 className="w-3 h-3" />
                   </a>
                 )}

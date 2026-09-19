@@ -7,7 +7,18 @@ import { useLanguage } from '@/context/LanguageContext';
 
 export const AchievementsSection: React.FC = () => {
   const { t } = useLanguage();
-  const achievements = PORTFOLIO_DATA.achievements;
+  const rawAchievements = PORTFOLIO_DATA.achievements;
+  const achievements = rawAchievements.map((item, idx) => {
+    const loc = t.achievementsSection?.items?.find((c) => c.id === item.id) || t.achievementsSection?.items?.[idx];
+    return {
+      ...item,
+      title: loc?.title || item.title,
+      organization: loc?.organization || item.organization,
+      date: loc?.date || item.date,
+      description: loc?.description || item.description,
+      grade: loc?.grade || item.grade,
+    };
+  });
   const containerRef = useRef<HTMLElement>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<Achievement | null>(null);
 
