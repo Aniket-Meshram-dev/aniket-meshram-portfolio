@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [glowCenter, setGlowCenter] = useState<number>(45);
   const [greetingActive, setGreetingActive] = useState(true);
-  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const navLinksRef = useRef<HTMLDivElement>(null);
 
   // Time-based greeting matching aniketmeshram.me
@@ -207,11 +207,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   const isActive = idx === activeIndex;
                   return (
                     <Magnetic key={item.path} strength={0.25}>
-                      <button
+                      <a
                         ref={(el) => {
                           itemRefs.current[idx] = el;
                         }}
-                        onClick={() => handleNav(item)}
+                        href={item.path}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNav(item);
+                        }}
                         onMouseEnter={() => {
                           setHoveredIndex(idx);
                         }}
@@ -228,7 +232,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           />
                         )}
                         <span className="relative z-10">{item.label}</span>
-                      </button>
+                      </a>
                     </Magnetic>
                   );
                 })}
@@ -365,16 +369,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="md:hidden fixed top-16 left-4 right-4 z-50 flex flex-col gap-1.5 rounded-2xl p-4 bg-zinc-950/95 backdrop-blur-2xl border border-zinc-800 shadow-2xl"
           >
             {navItems.map((item, idx) => (
-              <button
+              <a
                 key={item.path}
-                onClick={() => handleNav(item)}
-                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${idx === activeIndex
+                href={item.path}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNav(item);
+                }}
+                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors cursor-pointer ${idx === activeIndex
                   ? 'bg-[#cc3366] text-white'
                   : 'text-zinc-300 hover:bg-zinc-900'
                   }`}
               >
                 <span>{item.label}</span>
-              </button>
+              </a>
             ))}
 
             <div className="h-px bg-white/10 my-1" />

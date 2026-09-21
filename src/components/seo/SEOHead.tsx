@@ -65,6 +65,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     setMetaTag('property', 'og:description', description);
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:image', fullImageUrl);
+    setMetaTag('property', 'og:site_name', 'Aniket Meshram');
     setMetaTag('property', 'og:type', ogType);
 
     // 4. Twitter Card Tags
