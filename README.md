@@ -134,10 +134,10 @@ A state-of-the-art interactive developer portfolio engineered with **React 19**,
 
 ## 📬 Contact & Connect
 
-- **Portfolio**: [aniketmeshram.com](https://aniketmeshram.com)
-- **GitHub**: [@Aniket-Meshram-dev](https://github.com/Aniket-Meshram-dev)
-- **LinkedIn**: [Aniket Meshram](https://www.linkedin.com/in/aniket-meshram/)
-- **Email**: [aniketmeshram9096@gmail.com](mailto:aniketmeshram9096@gmail.com)
+- **Portfolio**: [aniket-meshram.pages.dev](https://aniket-meshram.pages.dev/)
+- **GitHub**: [@Aniket-Meshram-dev](https://github.com/Aniket-Meshram-dev/)
+- **LinkedIn**: [Aniket Meshram](https://www.linkedin.com/in/aniket-meshram-dev/)
+- **Email**: [aniketmeshram445@gmail.com](mailto:aniketmeshram445@gmail.com)
 
 ---
 

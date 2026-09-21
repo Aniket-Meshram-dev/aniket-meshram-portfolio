@@ -1,3 +1,7 @@
-# Cloudflare Pages Single Page Application (SPA) 200 Rewrite
+# Cloudflare Pages Redirects Configuration
+# 1. Favicon Redirect
+/favicon.ico    /favicon.svg    301
+
+# 2. Single Page Application (SPA) 200 Rewrite
 # Direct deep links, crawler visits, and refreshes fallback cleanly to index.html
 /*    /index.html   200

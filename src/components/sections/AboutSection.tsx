@@ -613,7 +613,7 @@ export const AboutSection: React.FC<AboutSectionProps> = () => {
                       >
                         <img
                           src="/avatar-transparent.png"
-                          alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
+                          alt="Aniket Meshram — Software Engineer & Full-Stack Developer"
                           className="w-[128%] h-[128%] max-w-none object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.85)] group-hover/avatar:scale-112 group-hover/avatar:-translate-y-1.5 transition-transform duration-300 ease-out"
                           loading="eager"
                         />

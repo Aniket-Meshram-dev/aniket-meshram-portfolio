@@ -200,7 +200,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigate }) => {
               <div className="flex items-center gap-3">
                 <img
                   src="/avatar-transparent.png"
-                  alt={PORTFOLIO_DATA.personal.name}
+                  alt={`${PORTFOLIO_DATA.personal.name} — Author Avatar`}
                   className="w-10 h-10 rounded-full object-cover border border-white/20 bg-primary/20"
                 />
                 <div>

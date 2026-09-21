@@ -155,7 +155,7 @@ const WebDashboardShowcase: React.FC<WebDashboardShowcaseProps> = ({
         <div className="absolute inset-0 w-full h-full">
           <img
             src={slides[activeSlide]}
-            alt={`${project.title} screenshot ${activeSlide + 1}`}
+            alt={`Aniket Meshram Portfolio — ${project.title} screenshot ${activeSlide + 1}`}
             className="w-full h-full object-cover object-top transition-transform duration-700 ease-out"
             style={{
               transform: isActive ? 'scale(1.02)' : 'scale(1)',
@@ -468,7 +468,7 @@ const FeaturedProjectCard: React.FC<FeaturedProjectCardProps> = ({
       <div className="flex items-center gap-3 px-5 pb-1 relative z-10">
         <LazyImage
           src={project.logo || '/logo.svg'}
-          alt={project.title}
+          alt={`Aniket Meshram Project — ${project.title} logo`}
           className="w-full h-full object-contain p-1"
           containerClassName="w-9 h-9 rounded-xl overflow-hidden shrink-0 ring-1 ring-[var(--color-border)] transition-transform duration-300 group-hover:scale-105 md:w-10 md:h-10 md:rounded-xl flex items-center justify-center bg-black/30 dark:bg-black/30 backdrop-blur-sm"
           style={{ backgroundColor: `${project.color}18`, borderColor: `${project.color}35` }}

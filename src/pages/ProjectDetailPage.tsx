@@ -461,7 +461,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         <div className="flex items-center gap-4 sm:gap-5 mb-4">
           <LazyImage
             src={project.logo || '/logo.svg'}
-            alt={project.title}
+            alt={`Aniket Meshram Project — ${project.title} logo`}
             className="w-full h-full object-contain p-1"
             containerClassName="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shrink-0 ring-1 ring-white/15 flex items-center justify-center bg-black/40 backdrop-blur-md shadow-md"
             style={{ backgroundColor: `${project.color}15`, borderColor: `${project.color}35` }}
@@ -661,7 +661,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                     >
                       <img
                         src={activeMedia.src}
-                        alt={`${project.title} - ${activeMedia.title}`}
+                        alt={`Aniket Meshram — ${project.title} (${activeMedia.title})`}
                         className="w-full h-full object-cover object-top select-none transition-transform duration-300 hover:scale-[1.01]"
                       />
 
@@ -730,7 +730,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                       ) : (
                         <img
                           src={item.src}
-                          alt={`${project.title} - ${item.title}`}
+                          alt={`Aniket Meshram — ${project.title} (${item.title}) thumbnail`}
                           className="w-full h-full object-cover object-top"
                           loading="lazy"
                         />
@@ -773,7 +773,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                   ) : (
                     <img
                       src={item.src}
-                      alt={`${project.title} - ${item.title}`}
+                      alt={`Aniket Meshram — ${project.title} (${item.title})`}
                       className="w-full h-full object-cover object-top"
                       loading="lazy"
                       onClick={() => {
@@ -1070,7 +1070,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
             >
               <img
                 src={screenshots[lightboxIndex]}
-                alt={formatScreenshotTitle(screenshots[lightboxIndex])}
+                alt={`Aniket Meshram — ${project.title} screenshot (${formatScreenshotTitle(screenshots[lightboxIndex])})`}
                 className="max-h-[82vh] max-w-[95vw] w-auto h-auto object-contain rounded-xl shadow-2xl select-none"
               />
 

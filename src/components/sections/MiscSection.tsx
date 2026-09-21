@@ -131,7 +131,7 @@ export const MiscSection: React.FC<MiscSectionProps> = ({ onNavigate }) => {
                 >
                   <div className="misc-image-sticker">
                     <img
-                      alt={stk.name}
+                      alt={`Aniket Meshram Sticker — ${stk.name}`}
                       width={180}
                       loading="lazy"
                       decoding="async"

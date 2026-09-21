@@ -210,7 +210,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
         <div className="flex items-center gap-3.5 px-5 sm:px-6 pb-2.5 relative z-10">
           <LazyImage
             src={project.logo || '/logo.svg'}
-            alt={project.title}
+            alt={`Aniket Meshram Project — ${project.title} logo`}
             className="w-full h-full object-contain p-1"
             containerClassName="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-105 flex items-center justify-center bg-black/40 backdrop-blur-sm"
             style={{ backgroundColor: `${project.color}15`, borderColor: `${project.color}35` }}
@@ -281,7 +281,7 @@ const GalleryProjectCard: React.FC<GalleryProjectCardProps> = ({
           <div className="relative w-full h-[calc(100%-33px)] overflow-hidden bg-black/90">
             <img
               src={slides[activeSlide]}
-              alt={`${project.title} - ${project.category} Interface Preview ${activeSlide + 1}`}
+              alt={`Aniket Meshram — ${project.title} (${project.category}) Interface Preview ${activeSlide + 1}`}
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/frame:scale-[1.02]"
               loading="lazy"
             />

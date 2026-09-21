@@ -266,7 +266,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                           >
                             <img
                               src={proj.logo}
-                              alt=""
+                              alt={`Aniket Meshram Project — ${proj.title} icon`}
                               className="w-full h-full object-contain"
                             />
                           </div>

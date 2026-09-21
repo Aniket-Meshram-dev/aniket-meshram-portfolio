@@ -447,76 +447,80 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
           className="hero-name relative flex items-center justify-center flex-nowrap whitespace-nowrap text-[clamp(1.75rem,6.8vw,6.5rem)] font-black mb-3.5 md:mb-4.5 tracking-tight select-none w-full"
           style={{ perspective: 600 }}
         >
-          {/* Periodic Luxury Metallic Sheen Sweep (Every 5.5s) */}
-          <div
-            className="absolute inset-0 pointer-events-none select-none flex items-center justify-center flex-nowrap whitespace-nowrap z-20"
-            aria-hidden="true"
-          >
-            <span
-              className="inline-block text-[clamp(1.75rem,6.8vw,6.5rem)] font-black tracking-tight"
-              style={{
-                backgroundImage:
-                  'linear-gradient(115deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.95) 50%, rgba(244, 114, 182, 0.85) 54%, transparent 64%)',
-                backgroundSize: '250% 100%',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                animation: 'metallicSheenSweep 5.5s ease-in-out infinite',
-                animationDelay: '1.2s',
-              }}
-            >
-              {t.hero.title}
-            </span>
-          </div>
+          {/* Semantic text for search engine crawlers and screen readers */}
+          <span className="sr-only">{t.hero.title} — Software Engineer &amp; Full-Stack Developer</span>
 
-          {/* Interactive Staggered Characters with Spring Float & Tilt Wave on Hover */}
-          {t.hero.nameChars.map((item, index) => (
-            <React.Fragment key={index}>
-              {item.char === ' ' && (
-                <span
-                  className="inline-block w-[0.25em] md:w-[0.28em] select-none"
-                  aria-hidden="true"
-                >
-                  &nbsp;
-                </span>
-              )}
-              {item.char !== ' ' && (
-                <motion.span
-                  initial={{ opacity: 0, y: 30, rotateX: -60, filter: 'blur(10px)' }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-                  whileHover={{
-                    y: -10,
-                    scale: 1.14,
-                    rotate: index % 2 === 0 ? -4 : 4,
-                    filter: 'brightness(1.35) drop-shadow(0 0 14px rgba(244, 63, 94, 0.85))',
-                    transition: { type: 'spring', stiffness: 450, damping: 14 },
-                  }}
-                  whileTap={{
-                    scale: 0.92,
-                    y: 2,
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.2 + index * 0.04,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="hero-char inline-block bg-clip-text cursor-pointer relative z-10"
-                  data-cursor="pointer"
-                  style={{
-                    backgroundImage:
-                      'linear-gradient(to right, rgb(168, 61, 98), rgb(212, 84, 126), rgb(224, 122, 156), rgb(245, 184, 204))',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundSize: '1300% 100%',
-                    backgroundPosition: item.pos,
-                  }}
-                >
-                  {item.char}
-                </motion.span>
-              )}
-            </React.Fragment>
-          ))}
+          {/* Decorative Presentation: Periodic Luxury Metallic Sheen Sweep & Staggered Characters */}
+          <span aria-hidden="true" className="contents">
+            {/* Periodic Luxury Metallic Sheen Sweep (Every 5.5s) */}
+            <div
+              className="absolute inset-0 pointer-events-none select-none flex items-center justify-center flex-nowrap whitespace-nowrap z-20"
+            >
+              <span
+                className="inline-block text-[clamp(1.75rem,6.8vw,6.5rem)] font-black tracking-tight"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(115deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.95) 50%, rgba(244, 114, 182, 0.85) 54%, transparent 64%)',
+                  backgroundSize: '250% 100%',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'metallicSheenSweep 5.5s ease-in-out infinite',
+                  animationDelay: '1.2s',
+                }}
+              >
+                {t.hero.title}
+              </span>
+            </div>
+
+            {/* Interactive Staggered Characters with Spring Float & Tilt Wave on Hover */}
+            {t.hero.nameChars.map((item, index) => (
+              <React.Fragment key={index}>
+                {item.char === ' ' && (
+                  <span
+                    className="inline-block w-[0.25em] md:w-[0.28em] select-none"
+                  >
+                    &nbsp;
+                  </span>
+                )}
+                {item.char !== ' ' && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 30, rotateX: -60, filter: 'blur(10px)' }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+                    whileHover={{
+                      y: -10,
+                      scale: 1.14,
+                      rotate: index % 2 === 0 ? -4 : 4,
+                      filter: 'brightness(1.35) drop-shadow(0 0 14px rgba(244, 63, 94, 0.85))',
+                      transition: { type: 'spring', stiffness: 450, damping: 14 },
+                    }}
+                    whileTap={{
+                      scale: 0.92,
+                      y: 2,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.2 + index * 0.04,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="hero-char inline-block bg-clip-text cursor-pointer relative z-10"
+                    data-cursor="pointer"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(to right, rgb(168, 61, 98), rgb(212, 84, 126), rgb(224, 122, 156), rgb(245, 184, 204))',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundSize: '1300% 100%',
+                      backgroundPosition: item.pos,
+                    }}
+                  >
+                    {item.char}
+                  </motion.span>
+                )}
+              </React.Fragment>
+            ))}
+          </span>
         </h1>
 
         <motion.div

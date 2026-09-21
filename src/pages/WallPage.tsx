@@ -487,7 +487,7 @@ export const WallPage: React.FC<WallPageProps> = ({ onNavigate }) => {
                     <div className="relative group/graphic">
                       <img
                         src={item.content}
-                        alt="Sticker"
+                        alt="Aniket Meshram Wall Sticker"
                         width={150}
                         loading="lazy"
                         draggable={false}
@@ -701,7 +701,7 @@ export const WallPage: React.FC<WallPageProps> = ({ onNavigate }) => {
                         >
                           <img
                             src={stk.src}
-                            alt={stk.name}
+                            alt={`Aniket Meshram Wall Sticker — ${stk.name}`}
                             className="w-10 h-10 object-contain pointer-events-none drop-shadow"
                             loading="lazy"
                           />
@@ -832,7 +832,7 @@ export const WallPage: React.FC<WallPageProps> = ({ onNavigate }) => {
                   >
                     <img
                       src={st.src}
-                      alt={st.name}
+                      alt={`Aniket Meshram Wall Sticker — ${st.name}`}
                       className="w-16 h-16 object-contain group-hover:scale-110 transition-transform drop-shadow"
                       loading="lazy"
                     />

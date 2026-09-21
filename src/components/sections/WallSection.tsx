@@ -464,7 +464,7 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
                       <div className="relative group/graphic">
                         <img
                           src={item.content}
-                          alt="Sticker"
+                          alt="Aniket Meshram Wall Sticker"
                           width={140}
                           loading="lazy"
                           draggable={false}
@@ -665,7 +665,7 @@ export const WallSection: React.FC<WallSectionProps> = ({ onNavigate }) => {
                       >
                         <img
                           src={stk.src}
-                          alt={stk.name}
+                          alt={`Aniket Meshram Wall Sticker — ${stk.name}`}
                           className="w-9 h-9 object-contain pointer-events-none drop-shadow"
                           loading="lazy"
                         />

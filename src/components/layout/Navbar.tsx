@@ -312,7 +312,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative w-7 h-7 rounded-full bg-white/[0.05] border border-white/15 p-0.5 shrink-0 flex items-center justify-center shadow-[0_0_8px_rgba(244,63,94,0.3)]">
             <img
               src="/avatar-transparent.png"
-              alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
+              alt="Aniket Meshram — Avatar"
               className="w-full h-full object-contain"
             />
             <span className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]" />

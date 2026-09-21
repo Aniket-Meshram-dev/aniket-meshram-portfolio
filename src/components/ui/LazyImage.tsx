@@ -11,7 +11,7 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,
-  alt = '',
+  alt = 'Aniket Meshram Portfolio Asset',
   className = '',
   containerClassName = '',
   aspectRatio,

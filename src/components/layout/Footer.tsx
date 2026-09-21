@@ -57,7 +57,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <div className="absolute inset-x-0 -top-2 bottom-0 flex items-end justify-center pointer-events-none">
                   <img
                     src="/avatar-transparent.png"
-                    alt="Aniket Meshram - Software Engineer &amp; Full-Stack Developer"
+                    alt="Aniket Meshram — Avatar"
                     className="w-[122%] h-[122%] max-w-none object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)] group-hover:scale-110 transition-transform duration-300 ease-out"
                   />
                 </div>

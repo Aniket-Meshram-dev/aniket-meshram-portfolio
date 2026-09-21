@@ -389,7 +389,7 @@ export const GitHubSection: React.FC = () => {
                   {githubData?.profile?.avatar_url ? (
                     <img
                       src={githubData.profile.avatar_url}
-                      alt={username}
+                      alt={`Aniket Meshram — GitHub Profile (@${username})`}
                       className="w-full h-full object-cover"
                     />
                   ) : (

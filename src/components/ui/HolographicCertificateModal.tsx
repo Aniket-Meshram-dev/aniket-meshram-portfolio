@@ -291,7 +291,7 @@ export const HolographicCertificateModal: React.FC<HolographicCertificateModalPr
                 <div className="relative bg-[#0d0d12] rounded-xl md:rounded-2xl overflow-hidden">
                   <img
                     src={certificate.previewImage || (certificate.pdfUrl ? certificate.pdfUrl.replace('.pdf', '.png') : '')}
-                    alt={certificate.title}
+                    alt={`Aniket Meshram Certificate — ${certificate.title}`}
                     className="w-full h-auto object-contain block select-none pointer-events-none"
                     loading="eager"
                   />
